@@ -1,0 +1,9 @@
+---
+
+- name: Converge
+  hosts: all
+  become: "{{ molecule['converge']['become'] | default('yes') }}"
+  roles:
+    - python
+    - docker
+    - docker_compose

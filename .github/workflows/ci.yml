@@ -82,31 +82,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - distro: centos7
-            playbook: converge.yml
-            # continue_on_error: false
-            # failfast: true
           - distro: rockylinux8
-            playbook: converge.yml
-            # continue_on_error: false
-            # failfast: true
-          - distro: rockylinux9
-            playbook: converge.yml
-            # continue_on_error: false
-            # failfast: true
-          - distro: oraclelinux8
-            playbook: converge.yml
-            # continue_on_error: false
-            # failfast: true
-          - distro: almalinux8
-            playbook: converge.yml
-            # continue_on_error: false
-            # failfast: true
-          - distro: almalinux9
-            playbook: converge.yml
-            # continue_on_error: false
-            # failfast: true
-          - distro: debian10
             playbook: converge.yml
             # continue_on_error: false
             # failfast: true
@@ -114,23 +90,7 @@ jobs:
             playbook: converge.yml
             # continue_on_error: false
             # failfast: true
-          - distro: ubuntu1804
-            playbook: converge.yml
-            # continue_on_error: false
-            # failfast: true
           - distro: ubuntu2004
-            playbook: converge.yml
-            # continue_on_error: false
-            # failfast: true
-          - distro: ubuntu2204
-            playbook: converge.yml
-            # continue_on_error: false
-            # failfast: true
-          - distro: fedora35
-            playbook: converge.yml
-            # continue_on_error: false
-            # failfast: true
-          - distro: fedora36
             playbook: converge.yml
             # continue_on_error: false
             # failfast: true
@@ -158,7 +118,7 @@ jobs:
         run: sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
 
       - name: Install test dependencies.
-        run: pip3 install ansible ansible-lint==5.4.0 molecule[docker] docker yamllint jmespath e2j2 yq
+        run: pip3 install ansible ansible-lint==5.4.0 molecule[docker] molecule-hetznercloud docker yamllint jmespath e2j2 yq
 
       - name: Set-up github runner
         run: |
@@ -185,4 +145,4 @@ jobs:
           ANSIBLE_FORCE_COLOR: '1'
           MOLECULE_DISTRO: ${{ matrix.distro }}
           MOLECULE_PLAYBOOK: ${{ matrix.playbook }}
-
+          HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}

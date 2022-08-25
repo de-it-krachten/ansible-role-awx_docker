@@ -1,0 +1,15 @@
+---
+
+- name: Install ansible/git/make
+  package:
+    name:
+      - ansible
+      - git
+      - make
+    state: present
+  become: yes
+
+- name: Install pexect
+  pip:
+    name: pexpect
+  become: yes
