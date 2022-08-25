@@ -1,0 +1,9 @@
+---
+
+- name: Converge
+  hosts: all
+  become: "{{ molecule['converge']['become'] | default('yes') }}"
+  tasks:
+    - name: Include role 'ansible-role-awx_docker'
+      include_role:
+        name: ansible-role-awx_docker

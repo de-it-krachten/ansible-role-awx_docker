@@ -1,0 +1,12 @@
+---
+
+# Generic
+generic:
+  role: ansible-role-awx_docker
+  role_short: awx_docker
+  role_description: |
+    Install AWX using Docker 
+
+molecule:
+  requirements:
+    roles_extra: []

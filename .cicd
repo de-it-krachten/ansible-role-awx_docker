@@ -1,0 +1,341 @@
+---
+
+# Generic
+generic:
+  role: ansible-role-awx_docker
+  role_short: awx_docker
+  role_description: |
+    <put description in .cicd.overwrite>
+
+# Supported platforms
+platforms:
+  rhel7:
+    name: Red Hat Enterprise Linux 7
+    ci: false
+    supported: true
+    image: "registry.access.redhat.com/ubi7/ubi-init:latest"
+    pre_build_image: false
+    galaxy:
+      name: EL
+      version: 7
+  rhel8:
+    name: Red Hat Enterprise Linux 8
+    ci: false
+    supported: true
+    image: "registry.access.redhat.com/ubi8/ubi-init:latest"
+    pre_build_image: false
+    galaxy:
+      name: EL
+      version: 8
+  rhel9:
+    name: Red Hat Enterprise Linux 9
+    ci: false
+    supported: true
+    image: "registry.access.redhat.com/ubi9/ubi-init:latest"
+    pre_build_image: false
+    galaxy:
+      name: EL
+      version: 9
+  centos7:
+    name: CentOS 7
+    ci: true
+    supported: true
+    image: "geerlingguy/docker-centos7-ansible:latest"
+    box: "generic/centos7"
+    galaxy:
+      name: EL
+      version: 7
+  centos8:
+    name: CentOS 8
+    ci: false
+    supported: false
+    image: "geerlingguy/docker-centos8-ansible:latest"
+    box: "generic/centos8"
+    galaxy:
+      name: EL
+      version: 8
+  centos8s:
+    name: CentOS Stream 8
+    ci: false
+    supported: false
+    image: "dropveter/centos8s-ansible:latest"
+    box: "generic/centos8s"
+    galaxy:
+      name: EL
+      version: 8
+  centos9s:
+    name: CentOS Stream 9
+    ci: false
+    supported: false
+    image: "dropveter/centos9s-ansible:latest"
+    box: "generic/centos9s"
+    galaxy:
+      name: EL
+      version: 9
+  rockylinux8:
+    name: RockyLinux 8
+    ci: true
+    supported: true
+    image: "geerlingguy/docker-rockylinux8-ansible:latest"
+    box: "generic/rocky8"
+    galaxy:
+      name: EL
+      version: 8
+  rockylinux9:
+    name: RockyLinux 9
+    ci: true
+    supported: true
+    image: "geerlingguy/docker-rockylinux9-ansible:latest"
+    box: "generic/rocky9"
+    galaxy:
+      name: EL
+      version: 9
+  oraclelinux8:
+    name: OracleLinux 8
+    ci: true
+    supported: true
+    image: "dropveter/oraclelinux8-ansible"
+    box: "generic/oracle8"
+    galaxy:
+      name: EL
+      version: 8
+  almalinux8:
+    name: AlmaLinux 8
+    ci: true
+    supported: true
+    image: "dropveter/almalinux8-ansible"
+    box: "generic/alma8"
+    galaxy:
+      name: EL
+      version: 8
+  almalinux9:
+    name: AlmaLinux 9
+    ci: true
+    supported: true
+    image: "dropveter/almalinux9-ansible"
+    box: "generic/alma9"
+    galaxy:
+      name: EL
+      version: 9
+  debian10:
+    name: Debian 10 (Buster)
+    ci: true
+    supported: true
+    image: "geerlingguy/docker-debian10-ansible:latest"
+    box: "generic/debian10"
+    galaxy:
+      name: Debian
+      version: buster
+  debian11:
+    name: Debian 11 (Bullseye)
+    ci: true
+    supported: true
+    image: "geerlingguy/docker-debian11-ansible:latest"
+    box: "generic/debian11"
+    galaxy:
+      name: Debian
+      version: bullseye
+  ubuntu1804:
+    name: Ubuntu 18.04 LTS
+    ci: true
+    supported: true
+    image: "geerlingguy/docker-ubuntu1804-ansible:latest"
+    box: "generic/ubuntu1804"
+    galaxy:
+      name: Ubuntu
+      version: bionic
+  ubuntu2004:
+    name: Ubuntu 20.04 LTS
+    ci: true
+    supported: true
+    image: "geerlingguy/docker-ubuntu2004-ansible:latest"
+    box: "generic/ubuntu2004"
+    galaxy:
+      name: Ubuntu
+      version: focal
+  ubuntu2204:
+    name: Ubuntu 22.04 LTS
+    ci: true
+    supported: true
+    image: "geerlingguy/docker-ubuntu2204-ansible:latest"
+    box: "generic/ubuntu2204"
+    galaxy:
+      name: Ubuntu
+      version: jammy
+  fedora35:
+    name: Fedora 35
+    ci: true
+    supported: true
+    image: "geerlingguy/docker-fedora35-ansible:latest"
+    box: "generic/fedora35"
+    galaxy:
+      name: Fedora
+      version: all
+  fedora36:
+    name: Fedora 36
+    ci: true
+    supported: true
+    image: "geerlingguy/docker-fedora36-ansible:latest"
+    box: "generic/fedora36"
+    galaxy:
+      name: Fedora
+      version: all
+  alpine3:
+    name: Alpine 3
+    ci: false
+    supported: false
+    image: "robertdebock/alpine:latest"
+    box: "generic/alpine312"
+    pre_build_image: false
+    galaxy:
+      name: Alpine
+      version: all
+
+# List of platform deviations
+platforms_overwrite: {}
+
+# Ansible galaxy
+galaxy:
+  role_name: awx_docker
+  namespace: de_it_krachten
+  description: awx_docker
+  author: Mark van Huijstee
+  company: De IT Krachten BV
+  license: MIT
+  min_ansible_version: 2.9
+  platforms:
+    - name: EL
+      versions:
+        - 7
+        - 8
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
+    - name: Ubuntu
+      versions:
+        - 18.04
+        - 20.04
+        - 22.04
+    - name: Fedora
+      versions:
+        - all
+
+# Github
+github:
+  active: true
+  molecule: true
+  self_hosted: false
+  fail_fast: false
+  parallel: true
+  owner: de-it-krachten
+  repo: ansible-role-awx_docker
+  lint_matrix:
+    - name: ansible4
+      ansible: ">4,<5"
+      ansible_lint: ">5,<6"
+    - name: ansible5
+      ansible: ">5,<6"
+      ansible_lint: ">6,<7"
+    - name: ansible6
+      ansible: ">6,<7"
+      ansible_lint: ">6,<7"
+
+# Gitlab
+gitlab:
+  active: false
+
+# molecule
+molecule:
+  active: true
+  dns_server: false
+  driver: docker
+  converge:
+    playbooks: []
+    vars: {}
+  prepare:
+    playbooks: []
+    vars:
+      systemctl_alternative: false
+  requirements:
+    roles:
+      - epel
+      - firewall
+      - firewalld
+      - iptables
+      - ufw
+      - unbound
+  nodes:
+    - name: node1
+      groups: []
+
+# templates
+ci_templates:
+  meta-main.yml:
+    src: galaxy/templates/meta-main.yml
+    dest: meta/main.yml
+  yamllint:
+    src: yamllint/templates/yamllint
+    dest: .yamllint
+  ci.yml:
+    src: github/templates/ci.yml
+    dest: .github/workflows/ci.yml
+    when: github_runner_cloud
+  ci-self-hosted.yml:
+    src: github/templates/ci-self-hosted.yml
+    dest: .github/workflows/ci.yml
+    when: github_runner_self_hosted
+  release.yml:
+    src: github/templates/release.yml
+    dest: .github/workflows/release.yml
+    when: github_runner_cloud
+  releaserc.yml:
+    src: github/templates/releaserc.yml
+    dest: .releaserc.yml
+    when: github_runner_cloud
+  gitlab-ci.yml:
+    src: gitlab/templates/gitlab-ci.yml
+    dest: .gitlab-ci.yml
+    when: gitlab_active
+  prepare.yml:
+    src: molecule/templates/prepare.yml
+    dest: molecule/default/prepare.yml
+    when: molecule_active
+  molecule.yml.j2:
+    src: molecule/templates/molecule.yml.j2
+    dest: molecule/default/molecule.yml.j2
+    when: molecule_active
+  molecule-test.yml:
+    src: molecule/templates/molecule-test.yml
+    dest: molecule/default/molecule-test.yml
+    when: molecule_active
+  converge.yml:
+    src: molecule/templates/converge.yml
+    dest: molecule/default/converge.yml
+    when: molecule_active
+  verify.yml:
+    src: molecule/templates/verify.yml
+    dest: molecule/default/verify.yml
+    force: false
+    when: molecule_active
+#  requirements.tmpl:
+#    src: molecule/templates/requirements.tmpl
+#    dest: molecule/default/requirements.tmpl
+#    when: molecule_active
+  requirements.yml:
+    src: molecule/templates/requirements.yml
+    dest: molecule/default/requirements.yml
+    when: molecule_active
+  gitignore:
+    src: git/templates/gitignore
+    dest: .gitignore
+    force: false
+  ansible-lint:
+    src: ansible-lint
+    dest: .ansible-lint
+    # force: no
+
+  molecule-platforms.yml:
+    src: molecule/templates/molecule-platforms.yml
+    dest: .molecule-platforms.yml
+    force: true
