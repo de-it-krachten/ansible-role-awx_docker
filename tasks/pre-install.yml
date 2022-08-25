@@ -1,0 +1,16 @@
+---
+
+- name: Install ansible/git/make
+  package:
+    name:
+      - ansible
+      - git
+      - make
+    state: present
+  become: yes
+
+- name: Install pexect
+  pip:
+    name: pexpect
+    executable: pip{{ ansible_facts.python.version.major }}.{{ ansible_facts.python.version.minor }}
+  become: yes

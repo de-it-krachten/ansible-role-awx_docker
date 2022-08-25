@@ -331,7 +331,7 @@ ci_templates:
     dest: .gitignore
     force: false
   ansible-lint:
-    src: ansible-lint
+    src: ansible-lint/templates/ansible-lint
     dest: .ansible-lint
     # force: no
 
@@ -339,3 +339,13 @@ ci_templates:
     src: molecule/templates/molecule-platforms.yml
     dest: .molecule-platforms.yml
     force: true
+
+# Ansible-lint
+ansible_lint:
+  exclude_paths:
+    - molecule/default/ansible-lint.yml
+    - molecule/default/molecule-test.yml
+    - molecule/default/vars.yml
+  skip_list:
+    - fqcn-builtins
+    - var-spacing

@@ -7,6 +7,87 @@ generic:
   role_description: |
     Install AWX using Docker 
 
+# Supported platforms
+platforms:
+  rhel7:
+    ci: false
+    supported: false
+  rhel8:
+    ci: false
+    supported: true
+  rhel9:
+    ci: false
+    supported: false
+  centos7:
+    ci: false
+    supported: false
+  centos8:
+    ci: false
+    supported: false
+  centos8s:
+    ci: false
+    supported: false
+  centos9s:
+    ci: false
+    supported: false
+  rockylinux8:
+    ci: true
+    supported: true
+    memory: 4096
+  rockylinux9:
+    ci: false
+    supported: false
+  oraclelinux8:
+    ci: false
+    supported: true
+    memory: 4096
+  almalinux8:
+    ci: false
+    supported: true
+    memory: 4096
+  almalinux9:
+    ci: false
+    supported: false
+  debian10:
+    ci: false
+    supported: false
+  debian11:
+    ci: true
+    supported: true
+    memory: 4096
+  ubuntu1804:
+    ci: false
+    supported: false
+  ubuntu2004:
+    ci: true
+    supported: true
+    memory: 4096
+  ubuntu2204:
+    ci: false
+    supported: false
+  fedora35:
+    ci: false
+    supported: false
+  fedora36:
+    ci: false
+    supported: false
+    memory: 4096
+  alpine3:
+    ci: false
+    supported: false
+
+# Molecule
 molecule:
+  driver: vagrant
   requirements:
-    roles_extra: []
+    roles_extra:
+      - python
+      - docker
+      - docker_compose
+  converge:
+    pre: converge-pre.yml
+  host_vars_static:
+    awx-docker-rockylinux8-node1:
+      ansible_python_interpreter: /usr/bin/python3
+      reset_vars:
+        python39: 'true'

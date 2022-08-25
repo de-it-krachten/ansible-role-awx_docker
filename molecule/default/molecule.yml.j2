@@ -3,7 +3,7 @@
 dependency:
   name: galaxy
 driver:
-  name: docker
+  name: vagrant
 lint: |
   set -e
   yamllint .
@@ -12,15 +12,13 @@ lint: |
   rm -f requirements.yml
 platforms:
 {% for platform in MOLECULE_DISTROS %}
-  - name: awx_docker-{{ platform.name }}-node1
-    image: "{{ platform.image }}"
-    rhsm: {{ platform.rhsm | default(False) }}
-    command: ${MOLECULE_DOCKER_COMMAND:-""}
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: {{ platform.privileged | default(True) }}
-    pre_build_image: {{ platform.pre_build_image | default(True) }}
-    dockerfile: Dockerfile.{{ platform.name }}.j2
+  - name: awx-docker-{{ platform.name }}-node1
+    box: "{{ platform.box }}"
+    memory: "{{ platform.memory | default('2048') }}"
+    cpus: "{{ platform.cpus | default('2') }}"
+    config_options:
+      ssh.keep_alive: yes
+      ssh.remote_user: "'vagrant'"
 {% endfor %}
 provisioner:
   name: ansible
@@ -38,7 +36,12 @@ provisioner:
     converge: ${MOLECULE_PLAYBOOK:-converge.yml}
   inventory:
     group_vars: {}
-    host_vars: {}
+    host_vars:
+      awx-docker-rockylinux8-node1:
+        ansible_python_interpreter: /usr/bin/python3
+        reset_vars:
+          python39: 'true'
+
 scenario:
   name: default
 verifier:

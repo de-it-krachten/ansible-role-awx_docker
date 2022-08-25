@@ -11,19 +11,11 @@ galaxy_info:
   platforms:
     - name: EL
       versions:
-        - '7'
         - '8'
-        - '9'
     - name: Debian
       versions:
-        - buster
         - bullseye
     - name: Ubuntu
       versions:
-        - bionic
         - focal
-        - jammy
-    - name: Fedora
-      versions:
-        - all
 dependencies: []

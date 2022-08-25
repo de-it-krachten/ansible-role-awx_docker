@@ -1,5 +1,7 @@
 ---
 
+- import_playbook: converge-pre.yml
+
 - name: Converge
   hosts: all
   become: "{{ molecule['converge']['become'] | default('yes') }}"
