@@ -33,18 +33,20 @@ platforms:
   rockylinux8:
     ci: true
     supported: true
-    memory: 4096
+    molecule:
+      vagrant:
+        memory: 4096
+      hetznercloud:
+        server_type: cx21
   rockylinux9:
     ci: false
     supported: false
   oraclelinux8:
     ci: false
     supported: true
-    memory: 4096
   almalinux8:
     ci: false
     supported: true
-    memory: 4096
   almalinux9:
     ci: false
     supported: false
@@ -54,14 +56,22 @@ platforms:
   debian11:
     ci: true
     supported: true
-    memory: 4096
+    molecule:
+      vagrant:
+        memory: 4096
+      hetznercloud:
+        server_type: cx21
   ubuntu1804:
     ci: false
     supported: false
   ubuntu2004:
     ci: true
     supported: true
-    memory: 4096
+    molecule:
+      vagrant:
+        memory: 4096
+      hetznercloud:
+        server_type: cx21
   ubuntu2204:
     ci: false
     supported: false
@@ -71,19 +81,28 @@ platforms:
   fedora36:
     ci: false
     supported: false
-    memory: 4096
   alpine3:
     ci: false
     supported: false
 
 # Molecule
 molecule:
-  driver: vagrant
+  # driver: docker
+  # driver: vagrant
+  driver: hetznercloud
   requirements:
     roles_extra:
       - python
       - docker
       - docker_compose
+  prepare:
+    vars:
+      update_all: true
+      activate_epel: true
+      prepare_firewall: true
+      enable_root_access: true
+      root_pubkey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCyahsHvvvNH16iD7CVSv+S+4XiKnfGKiZOVbUIjCUeZIO8A2GVrpGc+qAe5ObM3B7qTXD/A90a9x4MMHZLMKh4ej+41GNG74m7AEYPc3LSNPyYx7pB0Z/gMs8Va6/essFNsGXx/qLI84ijYEEYn9twCJyJHzcn5XahuHpY3a57NkahTy1MG5IJJgPmk2pA/uSNQ+LVtYurTUkparTwU+3xspS6/vkI+PVFbd4F922Ldn278rXF87knpxzIMGpiJIfQH0SMVDLoH9Fi1heMmPXAVpuHx77mM90eWaz9WhVzACvDcl34z22+0xZMpxyHOwPZAw24dFG1Xp+4CVnCgN6ssSa8nO2ZF4CGLCBIUgozB9VXtlbJrcC2oi2Dg52RG8MNtma48nhvQhTcl9SBBz07oWkz5osos0qq30PnAvFSrrL/bRY59lLly1mDMTA7/KanzprOh2hDagk6qUgflK9WKDb574XDFOOK+uijk0mDJ3xYi6M3/NN0EsDR6wcQut/H61ruQtb6apLEAVzcJX/kxWDXbPaq+vYaHoAIPBsBCyrdpt0QsYVbI9gMzL+jnpNP0AFIZ04HQIo14Vw4GNmQ9gJlm0KrDHA/9U9SP2Yytv0Jw7nClXyZ12+gGDfZRaj/6nfK0T1h9cPbIc2RAhXjyBr7kJ38BbIK+mhZodtbmQ=="
+
   converge:
     pre: converge-pre.yml
   host_vars_static:

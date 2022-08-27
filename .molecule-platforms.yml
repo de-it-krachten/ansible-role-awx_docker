@@ -1,11 +1,11 @@
 ---
 
 - name: rockylinux8
-  box: generic/rocky8
-  memory: 4096
+  server_type: cx21
+  image: rocky-8
 - name: debian11
-  box: generic/debian11
-  memory: 4096
+  server_type: cx21
+  image: debian-11
 - name: ubuntu2004
-  box: generic/ubuntu2004
-  memory: 4096
+  server_type: cx21
+  image: ubuntu-20.04

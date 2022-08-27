@@ -9,6 +9,7 @@
     https_proxy: "{{ lookup('env', 'HTTPS_PROXY') | default('') }}"
     http_proxy: "{{ lookup('env', 'HTTP_PROXY') | default('') }}"
     no_proxy: "{{ lookup('env', 'NO_PROXY') | default('127.0.0.1,localhost') }}"
+    molecule_driver: "{{ lookup('env', 'MOLECULE_DRIVER_NAME') }}"
 
     iptables_distros:
       - debian10
@@ -35,6 +36,11 @@
       - almalinux9
 
     systemctl_alternative: False
+    update_all: True
+    activate_epel: True
+    prepare_firewall: True
+    enable_root_access: True
+    root_pubkey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCyahsHvvvNH16iD7CVSv+S+4XiKnfGKiZOVbUIjCUeZIO8A2GVrpGc+qAe5ObM3B7qTXD/A90a9x4MMHZLMKh4ej+41GNG74m7AEYPc3LSNPyYx7pB0Z/gMs8Va6/essFNsGXx/qLI84ijYEEYn9twCJyJHzcn5XahuHpY3a57NkahTy1MG5IJJgPmk2pA/uSNQ+LVtYurTUkparTwU+3xspS6/vkI+PVFbd4F922Ldn278rXF87knpxzIMGpiJIfQH0SMVDLoH9Fi1heMmPXAVpuHx77mM90eWaz9WhVzACvDcl34z22+0xZMpxyHOwPZAw24dFG1Xp+4CVnCgN6ssSa8nO2ZF4CGLCBIUgozB9VXtlbJrcC2oi2Dg52RG8MNtma48nhvQhTcl9SBBz07oWkz5osos0qq30PnAvFSrrL/bRY59lLly1mDMTA7/KanzprOh2hDagk6qUgflK9WKDb574XDFOOK+uijk0mDJ3xYi6M3/NN0EsDR6wcQut/H61ruQtb6apLEAVzcJX/kxWDXbPaq+vYaHoAIPBsBCyrdpt0QsYVbI9gMzL+jnpNP0AFIZ04HQIo14Vw4GNmQ9gJlm0KrDHA/9U9SP2Yytv0Jw7nClXyZ12+gGDfZRaj/6nfK0T1h9cPbIc2RAhXjyBr7kJ38BbIK+mhZodtbmQ==
   tasks:
 
     - name: Create remote_tmp
@@ -47,7 +53,7 @@
       set_fact:
         molecule_distro: >-
           {%- if ansible_distribution == 'Ubuntu' -%}
-          {{ (ansible_distribution | lower) + (ansible_distribution_version | regex_replace('\\.')) }}
+          {{ (ansible_distribution | lower) + (ansible_distribution_version | regex_replace('\.')) }}
           {%- elif ansible_distribution == 'CentOS' and ansible_distribution_release == 'Stream' -%}
           {{ (ansible_distribution | lower) + ansible_distribution_major_version + 's' }}
           {%- else -%}
@@ -58,12 +64,36 @@
       debug:
         msg:
           molecule_distro: "{{ molecule_distro }}"
+          molecule_driver: "{{ molecule_driver }}"
           proxy_use: "{{ proxy_use }}"
           https_proxy: "{{ https_proxy }}"
           http_proxy: "{{ http_proxy }}"
           no_proxy: "{{ no_proxy }}"
           prepare_firewall: "{{ prepare_firewall | default(False) }}"
           update_all: "{{ update_all | default(False) }}"
+
+    - name: Enable root access
+      block:
+
+        - name: Create /root/.ssh
+          file:
+            path: /root/.ssh
+            state: directory
+            owner: root
+            group: root
+            mode: "0700"
+
+        - name: Setup pubkey authentication for root
+          authorized_key:
+            user: root
+            state: present
+            key: "{{ root_pubkey }}"
+
+      when:
+        - molecule_driver == 'hetznercloud'
+        - enable_root_access is defined and enable_root_access|bool
+        - root_pubkey is defined
+   
 
     - name: family Debian
       block:
@@ -226,6 +256,11 @@
       when:
         - prepare_firewall is defined and prepare_firewall|bool
         - inventory_hostname is not search('-dns$')
+
+    - name: Reboot the server
+      include_role:
+        name: reboot
+      when: molecule_driver is search('^(vagrant|hetznercloud)$')
 
     - name: re-run setup
       setup:

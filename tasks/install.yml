@@ -51,52 +51,32 @@
   block:
 
     - name: Create receptor image
-      make:
-        target: container
+      shell: |
+        if ! make container > {{ awx_log_path }}/awx-container.log 2>&1
+        then
+          mv {{ awx_log_path }}/awx-container.log {{ awx_log_path }}/awx-container.FAILED.log
+        fi
+      args:
         chdir: "{{ awx_git_path }}"
+        creates: "{{ awx_log_path }}/awx-container.{{ item }}.log"
       environment:
         CONTAINERCMD: docker
         TAG: "quay.io/ansible/receptor:release_1.1"
-      register: x
-      become: yes
-
-  always:
-
-    - name: Write logging to file
-      copy:
-        dest: "{{ awx_log_path }}/awx-container.{{ item }}.{{ ansible_date_time.iso8601_basic_short }}.log"
-        content: "{{ x[item] }}"
-        mode: "0644"
-      loop:
-        - stdout
-        - stderr
       become: yes
 
   when: awx_create_receptor|bool
-  tags: molecule-idempotence-notest
 
 - name: Execute docker-compose-build phase
   block:
 
-    - name: Make docker-compose-build
-      make:
-        target: docker-compose-build
+    - name: Make docker-compose-build  # noqa no-changed-when
+      shell: |
+        if ! make docker-compose-build > {{ awx_git_path }}/awx-docker-compose-build.log 2>&1
+        then
+          mv {{ awx_git_path }}/awx-docker-compose-build.log {{ awx_git_path }}/awx-docker-compose-build.FAILED.log
+        fi
+      args:
         chdir: "{{ awx_git_path }}"
-      # environment:
-      #   DEVEL_IMAGE_NAME: ansible/awx_devel:{{ awx_version }}
-      become: yes
-      register: x
-
-  always:
-
-    - name: Write logging to file
-      copy:
-        dest: "{{ awx_git_path }}/awx-docker-compose-build.{{ item }}.{{ ansible_date_time.iso8601_basic_short }}.log"
-        content: "{{ x[item] }}"
-        mode: "0644"
-      loop:
-        - stdout
-        - stderr
       become: yes
 
   when: awx_compose_build|bool
@@ -105,27 +85,18 @@
 - name: Execute docker-compose phase
   block:
 
-    - name: Make docker-compose
-      make:
-        target: docker-compose
+    - name: Make docker-compose  # noqa no-changed-when
+      shell: |
+        if ! make docker-compose > {{ awx_git_path }}/awx-docker-compose.log 2>&1
+        then
+          mv {{ awx_git_path }}/awx-docker-compose.log {{ awx_git_path }}/awx-docker-compose.FAILED.log
+        fi
+      args:
         chdir: "{{ awx_git_path }}"
       environment:
         PATH: /usr/local/bin:{{ ansible_env.PATH }}
         COMPOSE_UP_OPTS: "-d"
         # DEVEL_IMAGE_NAME: ansible/awx_devel:{{ awx_version }}
-      become: yes
-      register: x
-
-  always:
-
-    - name: Write logging to file
-      copy:
-        dest: "{{ awx_log_path }}/awx-docker-compose.{{ item }}.{{ ansible_date_time.iso8601_basic_short }}.log"
-        content: "{{ x[item] }}"
-        mode: "0644"
-      loop:
-        - stdout
-        - stderr
       become: yes
 
   when: awx_compose|bool
@@ -147,7 +118,7 @@
 
 - name: Clean and build UI
   shell: >-
-    docker exec tools_awx_1 make clean-ui ui-devel
+    docker exec tools_awx_1 make clean-ui ui-devel 
       > {{ awx_log_path }}/awx-ui.log 2>&1
   args:
     creates: "{{ awx_log_path }}/awx-ui.log"

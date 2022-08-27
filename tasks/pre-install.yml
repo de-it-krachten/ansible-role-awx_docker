@@ -12,5 +12,4 @@
 - name: Install pexect
   pip:
     name: pexpect
-    executable: pip{{ ansible_facts.python.version.major }}.{{ ansible_facts.python.version.minor }}
   become: yes
