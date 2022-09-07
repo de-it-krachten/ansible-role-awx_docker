@@ -31,7 +31,8 @@
       ansible.builtin.git:
         repo: "{{ awx_git_url }}"
         dest: "{{ awx_git_path }}"
-        version: "{{ awx_version }}"
+        refspec: "{{ awx_git_tag }}"
+        version: "{{ awx_git_tag }}"
 
   when: awx_git_refresh|bool
   tags: molecule-idempotence-notest
@@ -55,6 +56,7 @@
         if ! make container > {{ awx_log_path }}/awx-container.log 2>&1
         then
           mv {{ awx_log_path }}/awx-container.log {{ awx_log_path }}/awx-container.FAILED.log
+          exit 1
         fi
       args:
         chdir: "{{ awx_git_path }}"
@@ -74,6 +76,7 @@
         if ! make docker-compose-build > {{ awx_log_path }}/awx-docker-compose-build.log 2>&1
         then
           mv {{ awx_log_path }}/awx-docker-compose-build.log {{ awx_log_path }}/awx-docker-compose-build.FAILED.log
+          exit 1
         fi
       args:
         chdir: "{{ awx_git_path }}"
@@ -90,6 +93,7 @@
         if ! make docker-compose > {{ awx_log_path }}/awx-docker-compose.log 2>&1
         then
           mv {{ awx_log_path }}/awx-docker-compose.log {{ awx_log_path }}/awx-docker-compose.FAILED.log
+          exit 1
         fi
       args:
         chdir: "{{ awx_git_path }}"
@@ -97,6 +101,7 @@
         PATH: /usr/local/bin:{{ ansible_env.PATH }}
         COMPOSE_UP_OPTS: "-d"
         # DEVEL_IMAGE_NAME: ansible/awx_devel:{{ awx_version }}
+        LDAP: "{{ awx_ldap }}"
       become: yes
 
   when: awx_compose|bool
@@ -118,7 +123,7 @@
 
 - name: Clean and build UI
   shell: >-
-    docker exec tools_awx_1 make clean-ui ui-devel 
+    docker exec tools_awx_1 make clean-ui ui-devel
       > {{ awx_log_path }}/awx-ui.log 2>&1
   args:
     creates: "{{ awx_log_path }}/awx-ui.log"

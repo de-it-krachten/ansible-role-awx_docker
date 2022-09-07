@@ -1,11 +1,14 @@
 ---
 
 - name: rockylinux8
-  server_type: cx31
-  image: rocky-8
+  box: generic/rocky8
+  memory: 4096
+  interfaces: [{'network_name': 'private_network', 'ip': '192.168.56.100'}]
 - name: debian11
-  server_type: cx31
-  image: debian-11
+  box: generic/debian11
+  memory: 4096
+  interfaces: [{'network_name': 'private_network', 'ip': '192.168.56.101'}]
 - name: ubuntu2004
-  server_type: cx31
-  image: ubuntu-20.04
+  box: generic/ubuntu2004
+  memory: 4096
+  interfaces: [{'network_name': 'private_network', 'ip': '192.168.56.102'}]

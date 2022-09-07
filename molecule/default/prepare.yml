@@ -27,7 +27,8 @@
       - fedora35
       - fedora36
       - centos8
-      - centos9
+      - centos8s
+      - centos9s
       - oraclelinux8
       - oraclelinux9
       - rocky8
@@ -40,7 +41,7 @@
     activate_epel: True
     prepare_firewall: True
     enable_root_access: True
-    root_pubkey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCyahsHvvvNH16iD7CVSv+S+4XiKnfGKiZOVbUIjCUeZIO8A2GVrpGc+qAe5ObM3B7qTXD/A90a9x4MMHZLMKh4ej+41GNG74m7AEYPc3LSNPyYx7pB0Z/gMs8Va6/essFNsGXx/qLI84ijYEEYn9twCJyJHzcn5XahuHpY3a57NkahTy1MG5IJJgPmk2pA/uSNQ+LVtYurTUkparTwU+3xspS6/vkI+PVFbd4F922Ldn278rXF87knpxzIMGpiJIfQH0SMVDLoH9Fi1heMmPXAVpuHx77mM90eWaz9WhVzACvDcl34z22+0xZMpxyHOwPZAw24dFG1Xp+4CVnCgN6ssSa8nO2ZF4CGLCBIUgozB9VXtlbJrcC2oi2Dg52RG8MNtma48nhvQhTcl9SBBz07oWkz5osos0qq30PnAvFSrrL/bRY59lLly1mDMTA7/KanzprOh2hDagk6qUgflK9WKDb574XDFOOK+uijk0mDJ3xYi6M3/NN0EsDR6wcQut/H61ruQtb6apLEAVzcJX/kxWDXbPaq+vYaHoAIPBsBCyrdpt0QsYVbI9gMzL+jnpNP0AFIZ04HQIo14Vw4GNmQ9gJlm0KrDHA/9U9SP2Yytv0Jw7nClXyZ12+gGDfZRaj/6nfK0T1h9cPbIc2RAhXjyBr7kJ38BbIK+mhZodtbmQ==
+    root_pubkey: "{{ lookup('env', 'ROOT_KEY') }}"
   tasks:
 
     - name: Create remote_tmp
@@ -92,7 +93,7 @@
       when:
         - molecule_driver is search('^(hetznercloud|vagrant)$')
         - enable_root_access is defined and enable_root_access|bool
-        - root_pubkey is defined
+        - root_pubkey is defined and root_pubkey|length > 0
    
 
     - name: family Debian

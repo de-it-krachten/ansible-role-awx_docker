@@ -3,7 +3,7 @@
 dependency:
   name: galaxy
 driver:
-  name: hetznercloud
+  name: vagrant
 lint: |
   set -e
   yamllint .
@@ -13,9 +13,15 @@ lint: |
 platforms:
 {% for platform in MOLECULE_DISTROS %}
   - name: awx-docker-{{ platform.name }}-node1
-    server_type: "{{ platform.server_type | default('cx11') }}"
-    image: "{{ platform.image }}"
-    location: "{{ platform.location | default('hel1') }}"
+    box: "{{ platform.box }}"
+    memory: "{{ platform.memory | default('2048') }}"
+    cpus: "{{ platform.cpus | default('2') }}"
+{% if platform.interfaces is defined %}
+    interfaces: {{ platform.interfaces }}
+{% endif %}
+    config_options:
+      ssh.keep_alive: yes
+      ssh.remote_user: "'vagrant'"
 {% endfor %}
 provisioner:
   name: ansible
