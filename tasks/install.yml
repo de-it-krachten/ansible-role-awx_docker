@@ -1,0 +1,151 @@
+---
+
+- name: Get latest AWX release from Github API
+  block:
+
+    - name: Get latest release
+      uri:
+        url: "{{ awx_api + '/releases/latest' }}"
+      environment:
+        https_proxy: "{{ https_proxy | default('') }}"
+        http_proxy: "{{ http_proxy | default('') }}"
+      check_mode: no
+      register: awx_version_info
+
+    - name: Get AWX version from API output
+      set_fact:
+        awx_version: "{{ awx_version_info.json.name }}"
+
+  when: awx_version == 'latest'
+
+- name: Refresh git data
+  block:
+
+    - name: Ensure no git repo is present
+      ansible.builtin.file:
+        path: "{{ awx_git_path }}"
+        state: absent
+      become: yes
+
+    - name: Clone the AWX code
+      ansible.builtin.git:
+        repo: "{{ awx_git_url }}"
+        dest: "{{ awx_git_path }}"
+        refspec: "{{ awx_git_tag }}"
+        version: "{{ awx_git_tag }}"
+
+  when: awx_git_refresh|bool
+  tags: molecule-idempotence-notest
+
+- name: Use custom passwords when provided
+  ansible.builtin.lineinfile:
+    path: "{{ awx_git_path }}/tools/docker-compose/inventory"
+    regexp: "^(# )*{{ item }}=.*"
+    line: "{{ item }}={{ vars['awx_'+item] }}"
+  loop:
+    - pg_password
+    - broadcast_websocket_secret
+    - secret_key
+  when: vars['awx_'+item] is defined
+
+- name: Create receptor image
+  block:
+
+    - name: Create receptor image
+      shell: |
+        if ! make container > {{ awx_log_path }}/awx-container.log 2>&1
+        then
+          mv {{ awx_log_path }}/awx-container.log {{ awx_log_path }}/awx-container.FAILED.log
+          exit 1
+        fi
+      args:
+        chdir: "{{ awx_git_path }}"
+        creates: "{{ awx_log_path }}/awx-container.{{ item }}.log"
+      environment:
+        CONTAINERCMD: docker
+        TAG: "quay.io/ansible/receptor:release_1.1"
+      become: yes
+
+  when: awx_create_receptor|bool
+
+- name: Execute docker-compose-build phase
+  block:
+
+    - name: Make docker-compose-build  # noqa no-changed-when
+      shell: |
+        if ! make docker-compose-build > {{ awx_log_path }}/awx-docker-compose-build.log 2>&1
+        then
+          mv {{ awx_log_path }}/awx-docker-compose-build.log {{ awx_log_path }}/awx-docker-compose-build.FAILED.log
+          exit 1
+        fi
+      args:
+        chdir: "{{ awx_git_path }}"
+      become: yes
+
+  when: awx_compose_build|bool
+  tags: molecule-idempotence-notest
+
+- name: Execute docker-compose phase
+  block:
+
+    - name: Make docker-compose  # noqa no-changed-when
+      shell: |
+        if ! make docker-compose > {{ awx_log_path }}/awx-docker-compose.log 2>&1
+        then
+          mv {{ awx_log_path }}/awx-docker-compose.log {{ awx_log_path }}/awx-docker-compose.FAILED.log
+          exit 1
+        fi
+      args:
+        chdir: "{{ awx_git_path }}"
+      environment:
+        PATH: /usr/local/bin:{{ ansible_env.PATH }}
+        COMPOSE_UP_OPTS: "-d"
+        # DEVEL_IMAGE_NAME: ansible/awx_devel:{{ awx_version }}
+        LDAP: "{{ awx_ldap }}"
+      become: yes
+
+  when: awx_compose|bool
+  tags: molecule-idempotence-notest
+
+- name: Wait for AWX to become ready  # noqa command-instead-of-shell
+  shell: >-
+    docker-compose -f ./tools/docker-compose/_sources/docker-compose.yml logs
+  args:
+    chdir: "{{ awx_git_path }}"
+  environment:
+    PATH: /usr/local/bin:{{ ansible_env.PATH }}
+  become: yes
+  register: x
+  until: x.stdout.find("READY") != -1
+  retries: 60
+  delay: 15
+  changed_when: false
+
+- name: Clean and build UI
+  shell: >-
+    docker exec tools_awx_1 make clean-ui ui-devel
+      > {{ awx_log_path }}/awx-ui.log 2>&1
+  args:
+    creates: "{{ awx_log_path }}/awx-ui.log"
+  become: yes
+
+- name: Create admin user
+  shell: >-
+    docker exec tools_awx_1 awx-manage createsuperuser
+      --username {{ awx_admin_username }}
+      --email {{ awx_admin_email }}
+      --noinput
+      > {{ awx_log_path }}/awx-manage-createsuperuser.log 2>&1
+  args:
+    creates: "{{ awx_log_path }}/awx-manage-createsuperuser.log"
+  become: yes
+  when: awx_admin_username != 'admin'
+
+- name: Set admin password
+  ansible.builtin.expect:
+    command: docker exec -ti tools_awx_1 awx-manage changepassword {{ awx_admin_username }}
+    responses:
+      (?i)password: "{{ awx_admin_password }}"
+  # no_log: true
+  become: yes
+  tags: molecule-idempotence-notest

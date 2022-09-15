@@ -15,6 +15,9 @@ awx_git_path: /tmp/awx
 # Should git repo be recreated
 awx_git_refresh: true
 
+# Git commit to use
+awx_git_tag: "{{ awx_version }}"
+
 # Location to write log files to
 awx_log_path: /root
 
@@ -27,6 +30,9 @@ awx_compose: true
 #awx_pg_password: awx
 #awx_broadcast_websocket_secret: awx
 #awx_secret_key: awx
+
+# Enable LDAP
+awx_ldap: false
 
 # AWX admin user
 awx_admin_username: admin

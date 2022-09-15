@@ -17,11 +17,27 @@ roles:
     src: https://github.com/de-it-krachten/ansible-role-iptables.git
     version: main
     scm: git
+  - name: reboot
+    src: https://github.com/de-it-krachten/ansible-role-reboot.git
+    version: main
+    scm: git
   - name: ufw
     src: https://github.com/de-it-krachten/ansible-role-ufw.git
     version: main
     scm: git
   - name: unbound
     src: https://github.com/de-it-krachten/ansible-role-unbound.git
+    version: main
+    scm: git
+  - name: python
+    src: https://github.com/de-it-krachten/ansible-role-python.git
+    version: main
+    scm: git
+  - name: docker
+    src: https://github.com/de-it-krachten/ansible-role-docker.git
+    version: main
+    scm: git
+  - name: docker_compose
+    src: https://github.com/de-it-krachten/ansible-role-docker_compose.git
     version: main
     scm: git

@@ -1,8 +1,12 @@
 ---
 
+- import_playbook: converge-pre.yml
+
 - name: Converge
   hosts: all
   become: "{{ molecule['converge']['become'] | default('yes') }}"
+  vars:
+    awx_version: HEAD
   tasks:
     - name: Include role 'ansible-role-awx_docker'
       include_role:

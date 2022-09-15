@@ -7,6 +7,124 @@ generic:
   role_description: |
     Install AWX using Docker 
 
+# Supported platforms
+platforms:
+  rhel7:
+    ci: false
+    supported: false
+  rhel8:
+    ci: false
+    supported: true
+  rhel9:
+    ci: false
+    supported: false
+  centos7:
+    ci: false
+    supported: false
+  centos8:
+    ci: false
+    supported: false
+  centos8s:
+    ci: false
+    supported: false
+  centos9s:
+    ci: false
+    supported: false
+  rockylinux8:
+    ci: true
+    supported: true
+    molecule:
+      vagrant:
+        memory: 4096
+        interfaces:
+          - network_name: private_network
+            ip: 192.168.56.100
+#          - network_name: forwarded_port
+#            guest: 8043
+#            host: 8043
+      hetznercloud:
+        server_type: cx31
+  rockylinux9:
+    ci: false
+    supported: false
+  oraclelinux8:
+    ci: false
+    supported: true
+  almalinux8:
+    ci: false
+    supported: true
+  almalinux9:
+    ci: false
+    supported: false
+  debian10:
+    ci: false
+    supported: false
+  debian11:
+    ci: true
+    supported: true
+    molecule:
+      vagrant:
+        memory: 4096
+        interfaces:
+          - network_name: private_network
+            ip: 192.168.56.101
+      hetznercloud:
+        server_type: cx31
+  ubuntu1804:
+    ci: false
+    supported: false
+  ubuntu2004:
+    ci: true
+    supported: true
+    molecule:
+      vagrant:
+        memory: 4096
+        interfaces:
+          - network_name: private_network
+            ip: 192.168.56.102
+      hetznercloud:
+        server_type: cx31
+  ubuntu2204:
+    ci: false
+    supported: false
+  fedora35:
+    ci: false
+    supported: false
+  fedora36:
+    ci: false
+    supported: false
+  alpine3:
+    ci: false
+    supported: false
+
+# Github
+github:
+  fail_fast: false
+  molecule: false
+
+# Molecule
 molecule:
+  driver: vagrant
   requirements:
-    roles_extra: []
+    roles_extra:
+      - python
+      - docker
+      - docker_compose
+  prepare:
+    vars:
+      update_all: true
+      activate_epel: true
+      prepare_firewall: true
+      enable_root_access: true
+      root_pubkey: "{{ lookup('env', 'ROOT_KEY') }}"
+  converge:
+    pre: converge-pre.yml
+    vars:
+      # awx_version: latest
+      # awx_version: 21.5.0
+      awx_version: HEAD
+  host_vars_static:
+    awx-docker-rockylinux8-node1:
+      ansible_python_interpreter: /usr/bin/python3
+      reset_vars:
+        python39: 'true'
