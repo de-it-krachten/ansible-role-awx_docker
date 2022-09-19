@@ -33,23 +33,32 @@ awx_api: https://api.github.com/repos/ansible/awx
 awx_git_url: https://github.com/ansible/awx.git
 
 # Local path to clone git repo into
-awx_git_path: /tmp/awx
+awx_git_path: /opt/awx/git
 
 # Should git repo be recreated
-awx_git_refresh: true
+awx_git_refresh: false
+
+# Git commit to use
+awx_git_tag: "{{ awx_version }}"
 
 # Location to write log files to
-awx_log_path: /root
+awx_log_path: /opt/awx/log
 
 # Steps to execute in the process
 awx_create_receptor: false
 awx_compose_build: true
 awx_compose: true
 
+# Autostart AWX at boot
+awx_autostart: true
+
 # Passwords / secrets to use (when not defined, automatically defined)
 #awx_pg_password: awx
 #awx_broadcast_websocket_secret: awx
 #awx_secret_key: awx
+
+# Enable LDAP
+awx_ldap: false
 
 # AWX admin user
 awx_admin_username: admin
@@ -67,6 +76,8 @@ awx_admin_email: admin@example.com
 - name: sample playbook for role 'awx_docker'
   hosts: all
   become: "{{ molecule['converge']['become'] | default('yes') }}"
+  vars:
+    awx_version: HEAD
   tasks:
     - name: Include role 'awx_docker'
       include_role:
