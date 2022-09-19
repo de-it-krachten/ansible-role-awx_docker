@@ -18,24 +18,20 @@
 
   when: awx_version == 'latest'
 
-- name: Refresh git data
-  block:
-
-    - name: Ensure no git repo is present
-      ansible.builtin.file:
-        path: "{{ awx_git_path }}"
-        state: absent
-      become: yes
-
-    - name: Clone the AWX code
-      ansible.builtin.git:
-        repo: "{{ awx_git_url }}"
-        dest: "{{ awx_git_path }}"
-        refspec: "{{ awx_git_tag }}"
-        version: "{{ awx_git_tag }}"
-
+- name: Ensure no git repo is present
+  ansible.builtin.file:
+    path: "{{ awx_git_path }}"
+    state: absent
+  become: yes
   when: awx_git_refresh|bool
   tags: molecule-idempotence-notest
+
+- name: Clone the AWX code
+  ansible.builtin.git:
+    repo: "{{ awx_git_url }}"
+    dest: "{{ awx_git_path }}"
+    refspec: "{{ awx_git_tag }}"
+    version: "{{ awx_git_tag }}"
 
 - name: Use custom passwords when provided
   ansible.builtin.lineinfile:
@@ -47,6 +43,11 @@
     - broadcast_websocket_secret
     - secret_key
   when: vars['awx_'+item] is defined
+
+- name: Ensure the log directory exists
+  file:
+    path: "{{ awx_log_path }}"
+    state: directory
 
 - name: Create receptor image
   block:
@@ -80,6 +81,7 @@
         fi
       args:
         chdir: "{{ awx_git_path }}"
+        creates: "{{ awx_log_path }}/awx-docker-compose-build.log"
       become: yes
 
   when: awx_compose_build|bool
@@ -97,9 +99,11 @@
         fi
       args:
         chdir: "{{ awx_git_path }}"
+        creates: "{{ awx_log_path }}/awx-docker-compose.log"
       environment:
         PATH: /usr/local/bin:{{ ansible_env.PATH }}
         COMPOSE_UP_OPTS: "-d"
+        # COMPOSE_TAG: "{{ awx_version }}"
         # DEVEL_IMAGE_NAME: ansible/awx_devel:{{ awx_version }}
         LDAP: "{{ awx_ldap }}"
       become: yes
@@ -128,6 +132,28 @@
   args:
     creates: "{{ awx_log_path }}/awx-ui.log"
   become: yes
+
+- name: Get list of all containers
+  docker_host_info:
+    containers: yes
+  become: yes
+  register: _docker_host_info
+
+- name: Substract all containers
+  set_fact:
+    _docker_containers: "{{ _docker_host_info.containers | json_query('[].Names[]') }}"
+
+- name: Enable autostart at boot
+  docker_container:
+    name: "{{ item }}"
+    restart: no
+    restart_policy: unless-stopped
+    container_default_behavior: no_defaults
+  become: yes
+  loop: "{{ _docker_containers }}"
+  when:
+    - awx_autostart|bool
+    - item is search('^/tools_')
 
 - name: Create admin user
   shell: >-
