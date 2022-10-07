@@ -26,15 +26,22 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: "ansible4"
-            ansible: ">4,<5"
-            ansible_lint: ">5,<6"
-          - name: "ansible5"
-            ansible: ">5,<6"
-            ansible_lint: ">6,<7"
-          - name: "ansible6"
-            ansible: ">6,<7"
-            ansible_lint: ">6,<7"
+          - name: "ansible_2.9"
+            # ansible: "ansible==2.9.27"
+            ansible: "ansible==2.9.27"
+            ansible_lint: "ansible-lint==5.4.0"
+          - name: "ansible_2.11"
+            # ansible: "ansible>4,<5"
+            ansible: "ansible-core>2.11,<2.12"
+            ansible_lint: "ansible-lint>5,<6"
+          - name: "ansible_2.12"
+            # ansible: "ansible>5,<6"
+            ansible: "ansible-core>2.12,<2.13"
+            ansible_lint: "ansible-lint>6,<7"
+          - name: "ansible_2.13"
+            # ansible: "ansible>6,<7"
+            ansible: "ansible-core<2.13,<2.14"
+            ansible_lint: "ansible-lint>6,<7"
 
     steps:
       - name: Check out the codebase.
@@ -59,7 +66,51 @@ jobs:
         run: sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
 
       - name: Install test dependencies.
-        run: pip3 install "ansible${{ matrix.ansible }}" "ansible-lint${{ matrix.ansible_lint }}" yamllint jmespath e2j2 yq
+        run: |
+          pip3 install "${{ matrix.ansible }}" "${{ matrix.ansible_lint }}" yamllint jmespath e2j2 yq
+
+      - name: Patch Ansible 2.9 to support Rocky Linux
+        run: |
+          ansible=$(pip show ansible 2>/dev/null | awk '/Version:/ {print $2}')
+          ansible_core=$(pip show ansible-core 2>/dev/null | awk '/Version:/ {print $2}')
+          ansible=${ansible:-$ansible_core}
+          if [[ $ansible =~ 2.9.* ]]
+          then
+            echo "Ansible version = $ansible"
+            echo "Patching ansible 2.9 for Rocky support"
+            site=$(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")
+            sed -i "s/'AlmaLinux'\],/'AlmaLinux', 'Rocky'\],/" $site/ansible/module_utils/facts/system/distribution.py
+          else
+            echo "Ansible version = $ansible"
+            echo "No need to patch it"
+          fi
+
+      - name: Install required galaxy collections
+        run: |
+          ansible-galaxy collection install community.docker
+          ansible-galaxy collection install community.general
+          ansible-galaxy collection install ansible.posix
+          ansible-galaxy collection install -r .collections
+
+      - name: Retrieve wrapper scripts
+        run: |
+          set -e
+          sudo apt install curl
+          sudo curl -s -o /usr/local/bin/functions_ansible.sh \
+            https://raw.githubusercontent.com/de-it-krachten/ansible-role-molecule/dev/files/functions_ansible.sh
+          sudo curl -s -o /usr/local/bin/ansible-galaxy.sh \
+            https://raw.githubusercontent.com/de-it-krachten/ansible-role-molecule/dev/files/ansible-galaxy.sh
+          sudo curl -s -o /usr/local/bin/ansible-lint.sh \
+            https://raw.githubusercontent.com/de-it-krachten/ansible-role-molecule/dev/files/ansible-lint.sh
+          sudo curl -s -o /usr/local/bin/ansible-requirements-clean.sh \
+            https://raw.githubusercontent.com/de-it-krachten/ansible-role-molecule/dev/files/ansible-requirements-clean.sh
+          sudo curl -s -o /usr/local/bin/molecule-test.sh \
+            https://raw.githubusercontent.com/de-it-krachten/ansible-role-molecule/dev/files/molecule-test.sh
+          sudo chmod 644 /usr/local/bin/functions_ansible.sh
+          sudo chmod 755 /usr/local/bin/ansible-galaxy.sh
+          sudo chmod 755 /usr/local/bin/ansible-lint.sh
+          sudo chmod 755 /usr/local/bin/ansible-requirements-clean.sh
+          sudo chmod 755 /usr/local/bin/molecule-test.sh
 
       - name: Show component versions
         run: |
@@ -71,5 +122,5 @@ jobs:
         run: |
           set -e
           yamllint .
-          ansible-lint --exclude molecule/
+          ansible-lint.sh
 
