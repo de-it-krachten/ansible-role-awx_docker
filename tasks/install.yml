@@ -1,10 +1,11 @@
 ---
 
 - name: Get latest AWX release from Github API
+  when: awx_version == 'latest'
   block:
 
     - name: Get latest release
-      uri:
+      ansible.builtin.uri:
         url: "{{ awx_api + '/releases/latest' }}"
       environment:
         https_proxy: "{{ https_proxy | default('') }}"
@@ -13,17 +14,15 @@
       register: awx_version_info
 
     - name: Get AWX version from API output
-      set_fact:
+      ansible.builtin.set_fact:
         awx_version: "{{ awx_version_info.json.name }}"
-
-  when: awx_version == 'latest'
 
 - name: Ensure no git repo is present
   ansible.builtin.file:
     path: "{{ awx_git_path }}"
     state: absent
   become: yes
-  when: awx_git_refresh|bool
+  when: awx_git_refresh | bool
   tags: molecule-idempotence-notest
 
 - name: Clone the AWX code
@@ -37,23 +36,25 @@
   ansible.builtin.lineinfile:
     path: "{{ awx_git_path }}/tools/docker-compose/inventory"
     regexp: "^(# )*{{ item }}=.*"
-    line: "{{ item }}={{ vars['awx_'+item] }}"
+    line: "{{ item }}={{ vars['awx_' + item] }}"
   loop:
     - pg_password
     - broadcast_websocket_secret
     - secret_key
-  when: vars['awx_'+item] is defined
+  when: vars['awx_' + item] is defined
 
 - name: Ensure the log directory exists
-  file:
+  ansible.builtin.file:
     path: "{{ awx_log_path }}"
     state: directory
+    mode: "0750"
 
 - name: Create receptor image
+  when: awx_create_receptor | bool
   block:
 
     - name: Create receptor image
-      shell: |
+      ansible.builtin.shell: |
         if ! make container > {{ awx_log_path }}/awx-container.log 2>&1
         then
           mv {{ awx_log_path }}/awx-container.log {{ awx_log_path }}/awx-container.FAILED.log
@@ -67,13 +68,13 @@
         TAG: "quay.io/ansible/receptor:release_1.1"
       become: yes
 
-  when: awx_create_receptor|bool
-
 - name: Execute docker-compose-build phase
+  when: awx_compose_build | bool
+  tags: molecule-idempotence-notest
   block:
 
     - name: Make docker-compose-build  # noqa no-changed-when
-      shell: |
+      ansible.builtin.shell: |
         if ! make docker-compose-build > {{ awx_log_path }}/awx-docker-compose-build.log 2>&1
         then
           mv {{ awx_log_path }}/awx-docker-compose-build.log {{ awx_log_path }}/awx-docker-compose-build.FAILED.log
@@ -84,14 +85,13 @@
         creates: "{{ awx_log_path }}/awx-docker-compose-build.log"
       become: yes
 
-  when: awx_compose_build|bool
-  tags: molecule-idempotence-notest
-
 - name: Execute docker-compose phase
+  when: awx_compose | bool
+  tags: molecule-idempotence-notest
   block:
 
     - name: Make docker-compose  # noqa no-changed-when
-      shell: |
+      ansible.builtin.shell: |
         if ! make docker-compose > {{ awx_log_path }}/awx-docker-compose.log 2>&1
         then
           mv {{ awx_log_path }}/awx-docker-compose.log {{ awx_log_path }}/awx-docker-compose.FAILED.log
@@ -108,11 +108,8 @@
         LDAP: "{{ awx_ldap }}"
       become: yes
 
-  when: awx_compose|bool
-  tags: molecule-idempotence-notest
-
 - name: Wait for AWX to become ready  # noqa command-instead-of-shell
-  shell: >-
+  ansible.builtin.shell: >-
     docker-compose -f ./tools/docker-compose/_sources/docker-compose.yml logs
   args:
     chdir: "{{ awx_git_path }}"
@@ -126,7 +123,7 @@
   changed_when: false
 
 - name: Clean and build UI
-  shell: >-
+  ansible.builtin.shell: >-
     docker exec tools_awx_1 make clean-ui ui-devel
       > {{ awx_log_path }}/awx-ui.log 2>&1
   args:
@@ -134,17 +131,17 @@
   become: yes
 
 - name: Get list of all containers
-  docker_host_info:
+  community.docker.docker_host_info:
     containers: yes
   become: yes
   register: _docker_host_info
 
 - name: Substract all containers
-  set_fact:
+  ansible.builtin.set_fact:
     _docker_containers: "{{ _docker_host_info.containers | json_query('[].Names[]') }}"
 
 - name: Enable autostart at boot
-  docker_container:
+  community.docker.docker_container:
     name: "{{ item }}"
     restart: no
     restart_policy: unless-stopped
@@ -152,11 +149,11 @@
   become: yes
   loop: "{{ _docker_containers }}"
   when:
-    - awx_autostart|bool
+    - awx_autostart | bool
     - item is search('^/tools_')
 
 - name: Create admin user
-  shell: >-
+  ansible.builtin.shell: >-
     docker exec tools_awx_1 awx-manage createsuperuser
       --username {{ awx_admin_username }}
       --email {{ awx_admin_email }}

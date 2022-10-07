@@ -1,0 +1,7 @@
+---
+collections:
+  - community.docker
+  - delay
+  - environment
+  - retries
+  - until
