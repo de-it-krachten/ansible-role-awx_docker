@@ -1,1 +1,3 @@
 molecule/default/molecule.yml
+*.bak
+.converted

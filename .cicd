@@ -7,6 +7,11 @@ generic:
   role_description: |
     <put description in .cicd.overwrite>
 
+# Dependencies
+dependencies:
+  roles: []
+  collections: []
+
 # Supported platforms
 platforms:
   rhel7:
@@ -219,7 +224,7 @@ platforms:
       version: focal
     molecule:
       docker:
-        image: "geerlingguy/docker-ubuntu1804-ansible:latest"
+        image: "geerlingguy/docker-ubuntu2004-ansible:latest"
       vagrant:
         box: "generic/ubuntu2004"
       hetznercloud:
@@ -318,15 +323,22 @@ github:
   owner: de-it-krachten
   repo: ansible-role-awx_docker
   lint_matrix:
-    - name: ansible4
-      ansible: ">4,<5"
-      ansible_lint: ">5,<6"
-    - name: ansible5
-      ansible: ">5,<6"
-      ansible_lint: ">6,<7"
-    - name: ansible6
-      ansible: ">6,<7"
-      ansible_lint: ">6,<7"
+    - name: ansible_2.9
+      ansible: "ansible==2.9.27"
+      ansible_core: "ansible==2.9.27"
+      ansible_lint: "ansible-lint==5.4.0"
+    - name: ansible_2.11
+      ansible: "ansible>4,<5"
+      ansible_core: "ansible-core>2.11,<2.12"
+      ansible_lint: "ansible-lint>5,<6"
+    - name: ansible_2.12
+      ansible: "ansible>5,<6"
+      ansible_core: "ansible-core>2.12,<2.13"
+      ansible_lint: "ansible-lint>6,<7"
+    - name: ansible_2.13
+      ansible: "ansible>6,<7"
+      ansible_core: "ansible-core<2.13,<2.14"
+      ansible_lint: "ansible-lint>6,<7"
 
 # Gitlab
 gitlab:
@@ -362,6 +374,9 @@ ci_templates:
   meta-main.yml:
     src: galaxy/templates/meta-main.yml
     dest: meta/main.yml
+  meta-requirements.yml:
+    src: galaxy/templates/meta-requirements.yml
+    dest: meta/requirements.yml
   yamllint:
     src: yamllint/templates/yamllint
     dest: .yamllint
@@ -431,9 +446,5 @@ ci_templates:
 # Ansible-lint
 ansible_lint:
   exclude_paths:
-    - molecule/default/ansible-lint.yml
-    - molecule/default/molecule-test.yml
-    - molecule/default/vars.yml
-  skip_list:
-    - fqcn-builtins
-    - var-spacing
+    - molecule/
+  skip_list: []

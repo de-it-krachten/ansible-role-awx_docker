@@ -1,7 +1,7 @@
 ---
 
 - name: Install ansible/git/make
-  package:
+  ansible.builtin.package:
     name:
       - ansible
       - git
@@ -10,6 +10,6 @@
   become: yes
 
 - name: Install pexect
-  pip:
-    name: pexpect
+  ansible.builtin.pip:
+    name: Pexpect
   become: yes

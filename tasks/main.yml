@@ -1,4 +1,8 @@
 ---
 
-- include_tasks: pre-install.yml
-- include_tasks: install.yml
+- name: Include all task lists
+  ansible.builtin.include_tasks:
+    file: "{{ item }}"
+  loop:
+    - pre-install.yml
+    - install.yml
