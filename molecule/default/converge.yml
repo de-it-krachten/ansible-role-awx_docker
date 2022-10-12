@@ -1,6 +1,6 @@
 ---
 
-- import_playbook: converge-pre.yml
+- ansible.builtin.import_playbook: converge-pre.yml
 
 - name: Converge
   hosts: all
@@ -9,5 +9,5 @@
     awx_version: HEAD
   tasks:
     - name: Include role 'ansible-role-awx_docker'
-      include_role:
+      ansible.builtin.include_role:
         name: ansible-role-awx_docker

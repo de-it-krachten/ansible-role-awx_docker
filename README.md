@@ -6,6 +6,20 @@
 Install AWX using Docker 
 
 
+
+## Dependencies
+
+#### Roles
+None
+
+#### Collections
+- community.general
+- community.docker
+- delay
+- environment
+- retries
+- until
+
 ## Platforms
 
 Supported platforms
@@ -26,7 +40,7 @@ Note:
 # AWX version
 awx_version: latest
 
-# Github API endpoint to get latest version 
+# Github API endpoint to get latest version
 awx_api: https://api.github.com/repos/ansible/awx
 
 # AWX git repo
@@ -53,25 +67,26 @@ awx_compose: true
 awx_autostart: true
 
 # Passwords / secrets to use (when not defined, automatically defined)
-#awx_pg_password: awx
-#awx_broadcast_websocket_secret: awx
-#awx_secret_key: awx
+# awx_pg_password: awx
+# awx_broadcast_websocket_secret: awx
+# awx_secret_key: awx
 
 # Enable LDAP
 awx_ldap: false
 
 # AWX admin user
-awx_admin_username: admin
+awx_admin_username: Admin
 awx_admin_password: admin
 awx_admin_email: admin@example.com
 </pre></code>
 
 
 
+
 ## Example Playbook
 ### molecule/default/converge.yml
 <pre><code>
-- import_playbook: converge-pre.yml
+- ansible.builtin.import_playbook: converge-pre.yml
 
 - name: sample playbook for role 'awx_docker'
   hosts: all
@@ -80,6 +95,6 @@ awx_admin_email: admin@example.com
     awx_version: HEAD
   tasks:
     - name: Include role 'awx_docker'
-      include_role:
+      ansible.builtin.include_role:
         name: awx_docker
 </pre></code>
