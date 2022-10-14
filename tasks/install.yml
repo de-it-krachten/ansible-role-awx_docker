@@ -35,13 +35,15 @@
 - name: Use custom passwords when provided
   ansible.builtin.lineinfile:
     path: "{{ awx_git_path }}/tools/docker-compose/inventory"
-    regexp: "^(# )*{{ item }}=.*"
-    line: "{{ item }}={{ vars['awx_' + item] }}"
+    regexp: "^(# )*{{ key }}=.*"
+    line: "{{ key }}={{ vars['awx_' + key] }}"
   loop:
     - pg_password
     - broadcast_websocket_secret
     - secret_key
-  when: vars['awx_' + item] is defined
+  loop_control:
+    loop_var: key
+  when: vars['awx_' + key] is defined
 
 - name: Ensure the log directory exists
   ansible.builtin.file:
@@ -62,7 +64,7 @@
         fi
       args:
         chdir: "{{ awx_git_path }}"
-        creates: "{{ awx_log_path }}/awx-container.{{ item }}.log"
+        creates: "{{ awx_log_path }}/awx-container.log"
       environment:
         CONTAINERCMD: docker
         TAG: "quay.io/ansible/receptor:release_1.1"
@@ -142,15 +144,17 @@
 
 - name: Enable autostart at boot
   community.docker.docker_container:
-    name: "{{ item }}"
+    name: "{{ container }}"
     restart: no
     restart_policy: unless-stopped
     container_default_behavior: no_defaults
   become: yes
   loop: "{{ _docker_containers }}"
+  loop_control:
+    loop_var: container
   when:
     - awx_autostart | bool
-    - item is search('^/tools_')
+    - container is search('^/tools_')
 
 - name: Create admin user
   ansible.builtin.shell: >-
@@ -169,6 +173,6 @@
     command: docker exec -ti tools_awx_1 awx-manage changepassword {{ awx_admin_username }}
     responses:
       (?i)password: "{{ awx_admin_password }}"
-  # no_log: true
+  no_log: true
   become: yes
   tags: molecule-idempotence-notest
