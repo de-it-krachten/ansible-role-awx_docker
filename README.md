@@ -15,10 +15,6 @@ None
 #### Collections
 - community.general
 - community.docker
-- delay
-- environment
-- retries
-- until
 
 ## Platforms
 
@@ -75,7 +71,7 @@ awx_autostart: true
 awx_ldap: false
 
 # AWX admin user
-awx_admin_username: Admin
+awx_admin_username: admin
 awx_admin_password: admin
 awx_admin_email: admin@example.com
 </pre></code>

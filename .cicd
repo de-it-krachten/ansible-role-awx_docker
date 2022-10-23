@@ -276,12 +276,15 @@ platforms:
     name: Alpine 3
     ci: false
     supported: false
-    image: "robertdebock/alpine:latest"
-    box: "generic/alpine312"
-    pre_build_image: false
     galaxy:
       name: Alpine
       version: all
+    molecule:
+      docker:
+        image: "robertdebock/alpine:latest"
+        pre_build_image: false
+      vagrant:
+        box: "generic/alpine312"
 
 # List of platform deviations
 platforms_overwrite: {}
