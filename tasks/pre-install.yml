@@ -11,5 +11,5 @@
 
 - name: Install pexect
   ansible.builtin.pip:
-    name: Pexpect
+    name: pexpect
   become: yes
