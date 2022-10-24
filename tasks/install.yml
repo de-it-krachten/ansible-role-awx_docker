@@ -35,15 +35,20 @@
 - name: Use custom passwords when provided
   ansible.builtin.lineinfile:
     path: "{{ awx_git_path }}/tools/docker-compose/inventory"
-    regexp: "^(# )*{{ key }}=.*"
-    line: "{{ key }}={{ vars['awx_' + key] }}"
+    regexp: "^(# )*{{ key.name }}=.*"
+    line: "{{ key.name }}=\"{{ key.value }}\""
   loop:
-    - pg_password
-    - broadcast_websocket_secret
-    - secret_key
+    - name: pg_password
+      value: "{{ vars['awx_pg_password'] | default('') }}"
+    - name: broadcast_websocket_secret
+      value: "{{ vars['awx_broadcast_websocket_secret'] | default('') }}"
+    - name: secret_key
+      value: "{{ vars['awx_secret_key'] | default('') }}"
   loop_control:
     loop_var: key
-  when: vars['awx_' + key] is defined
+    label:
+      - "{{ key.name }}"
+  when: key.value | length > 0
 
 - name: Ensure the log directory exists
   ansible.builtin.file:
