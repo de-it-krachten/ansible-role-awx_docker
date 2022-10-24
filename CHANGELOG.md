@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/de-it-krachten/ansible-role-awx_docker/compare/v1.1.1...v1.1.2) (2022-10-24)
+
+
+### Bug Fixes
+
+* Fix inventory variables replacement ([e1b19d4](https://github.com/de-it-krachten/ansible-role-awx_docker/commit/e1b19d4ee62363f686ce07c2268999d0df224e34))
+
 ## [1.1.1](https://github.com/de-it-krachten/ansible-role-awx_docker/compare/v1.1.0...v1.1.1) (2022-10-23)
 
 
