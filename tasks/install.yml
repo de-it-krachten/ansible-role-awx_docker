@@ -25,6 +25,21 @@
   when: awx_git_refresh | bool
   tags: molecule-idempotence-notest
 
+- name: Test for previous inventory file
+  ansible.builtin.stat:
+    path: "{{ awx_git_path }}/tools/docker-compose/inventory"
+  register: __inventory
+
+- name: Rollback the inventory changes from previous runs  # noqa command-instead-of-module
+  ansible.builtin.command:
+    cmd: git checkout tools/docker-compose/inventory
+  args:
+    chdir: "{{ awx_git_path }}"
+  register: __git_checkout
+  changed_when: __git_checkout.stdout is not search('Updated 0 path from the index')
+  when: __inventory.stat.exists
+  tags: molecule-idempotence-notest
+
 - name: Clone the AWX code
   ansible.builtin.git:
     repo: "{{ awx_git_url }}"
@@ -38,8 +53,18 @@
     regexp: "^(# )*{{ key.name }}=.*"
     line: "{{ key.name }}=\"{{ key.value }}\""
   loop:
+    - name: pg_host
+      value: "{{ vars['awx_pg_host'] | default('') }}"
+    - name: pg_hostname
+      value: "{{ vars['awx_pg_hostname'] | default('') }}"
+    - name: pg_port
+      value: "{{ vars['awx_pg_port'] | default('') }}"
+    - name: pg_username
+      value: "{{ vars['awx_pg_username'] | default('') }}"
     - name: pg_password
       value: "{{ vars['awx_pg_password'] | default('') }}"
+    - name: pg_database
+      value: "{{ vars['awx_pg_database'] | default('') }}"
     - name: broadcast_websocket_secret
       value: "{{ vars['awx_broadcast_websocket_secret'] | default('') }}"
     - name: secret_key
