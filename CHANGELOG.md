@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/de-it-krachten/ansible-role-awx_docker/compare/v1.1.2...v1.2.0) (2022-11-10)
+
+
+### Features
+
+* Add support for external database ([bd0e282](https://github.com/de-it-krachten/ansible-role-awx_docker/commit/bd0e2825a070216268cb77159c631dbbeb598294))
+
 ## [1.1.2](https://github.com/de-it-krachten/ansible-role-awx_docker/compare/v1.1.1...v1.1.2) (2022-10-24)
 
 
