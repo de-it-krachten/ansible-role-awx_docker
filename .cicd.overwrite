@@ -50,6 +50,9 @@ platforms:
   oraclelinux8:
     ci: false
     supported: true
+  oraclelinux9:
+    ci: false
+    supported: true
   almalinux8:
     ci: false
     supported: true
@@ -87,10 +90,10 @@ platforms:
   ubuntu2204:
     ci: false
     supported: false
-  fedora35:
+  fedora36:
     ci: false
     supported: false
-  fedora36:
+  fedora37:
     ci: false
     supported: false
   alpine3:

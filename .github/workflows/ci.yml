@@ -40,8 +40,12 @@ jobs:
             ansible_lint: "ansible-lint>6,<7"
           - name: "ansible_2.13"
             # ansible: "ansible>6,<7"
-            ansible: "ansible-core<2.13,<2.14"
+            ansible: "ansible-core>2.13,<2.14"
             ansible_lint: "ansible-lint>6,<7"
+          - name: "ansible_2.14"
+            # ansible: "ansible>6,<7"
+            ansible: "ansible-core>2.14,<2.15"
+            ansible_lint: "ansible-lint"
 
     steps:
       - name: Check out the codebase.
@@ -50,7 +54,7 @@ jobs:
           path: "${{ github.repository }}"
 
       - name: Set up Python 3.
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
