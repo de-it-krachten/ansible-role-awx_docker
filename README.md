@@ -23,7 +23,7 @@ Supported platforms
 - Red Hat Enterprise Linux 8<sup>1</sup>
 - RockyLinux 8
 - OracleLinux 8<sup>1</sup>
-- OracleLinux 9
+- OracleLinux 9<sup>1</sup>
 - AlmaLinux 8<sup>1</sup>
 - Debian 11 (Bullseye)
 - Ubuntu 20.04 LTS

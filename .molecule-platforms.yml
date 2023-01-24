@@ -4,8 +4,6 @@
   box: generic/rocky8
   memory: 4096
   interfaces: [{'network_name': 'private_network', 'ip': '192.168.56.100'}]
-- name: oraclelinux9
-  box: generic/oracle9
 - name: debian11
   box: generic/debian11
   memory: 4096
