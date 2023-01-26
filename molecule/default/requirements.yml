@@ -41,15 +41,11 @@ roles:
     src: https://github.com/de-it-krachten/ansible-role-unbound.git
     version: main
     scm: git
-  - name: python
-    src: https://github.com/de-it-krachten/ansible-role-python.git
-    version: main
-    scm: git
-  - name: docker
+  - name: deitkrachten.docker
     src: https://github.com/de-it-krachten/ansible-role-docker.git
     version: main
     scm: git
-  - name: docker_compose
+  - name: deitkrachten.docker_compose
     src: https://github.com/de-it-krachten/ansible-role-docker_compose.git
     version: main
     scm: git

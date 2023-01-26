@@ -110,9 +110,9 @@ molecule:
   driver: vagrant
   requirements:
     roles_extra:
-      - python
-      - docker
-      - docker_compose
+      - deitkrachten.python
+      - deitkrachten.docker
+      - deitkrachten.docker_compose
   prepare:
     vars:
       update_all: true
