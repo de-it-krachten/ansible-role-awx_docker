@@ -1,10 +1,12 @@
 ---
 
-- ansible.builtin.import_playbook: converge-pre.yml
+- name: Converge pre playbook
+  ansible.builtin.import_playbook: converge-pre.yml
+  when: molecule_converge_pre is undefined or molecule_converge_pre | bool
 
 - name: Converge
   hosts: all
-  become: "{{ molecule['converge']['become'] | default('yes') }}"
+  become: "yes"
   vars:
     awx_version: HEAD
   tasks:

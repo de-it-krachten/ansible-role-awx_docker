@@ -1,43 +1,55 @@
 ---
 
 roles:
-  - name: epel
+  - name: deitkrachten.epel
     src: https://github.com/de-it-krachten/ansible-role-epel.git
     version: main
     scm: git
-  - name: firewall
+  - name: deitkrachten.facts
+    src: https://github.com/de-it-krachten/ansible-role-facts.git
+    version: main
+    scm: git
+  - name: deitkrachten.firewall
     src: https://github.com/de-it-krachten/ansible-role-firewall.git
     version: main
     scm: git
-  - name: firewalld
+  - name: deitkrachten.firewalld
     src: https://github.com/de-it-krachten/ansible-role-firewalld.git
     version: main
     scm: git
-  - name: iptables
+  - name: deitkrachten.hosts
+    src: https://github.com/de-it-krachten/ansible-role-hosts.git
+    version: main
+    scm: git
+  - name: deitkrachten.iptables
     src: https://github.com/de-it-krachten/ansible-role-iptables.git
     version: main
     scm: git
-  - name: reboot
-    src: https://github.com/de-it-krachten/ansible-role-reboot.git
-    version: main
-    scm: git
-  - name: ufw
-    src: https://github.com/de-it-krachten/ansible-role-ufw.git
-    version: main
-    scm: git
-  - name: unbound
-    src: https://github.com/de-it-krachten/ansible-role-unbound.git
-    version: main
-    scm: git
-  - name: python
+  - name: deitkrachten.python
     src: https://github.com/de-it-krachten/ansible-role-python.git
     version: main
     scm: git
-  - name: docker
+  - name: deitkrachten.reboot
+    src: https://github.com/de-it-krachten/ansible-role-reboot.git
+    version: main
+    scm: git
+  - name: deitkrachten.showinfo
+    src: https://github.com/de-it-krachten/ansible-role-showinfo.git
+    version: main
+    scm: git
+  - name: deitkrachten.ufw
+    src: https://github.com/de-it-krachten/ansible-role-ufw.git
+    version: main
+    scm: git
+  - name: deitkrachten.unbound
+    src: https://github.com/de-it-krachten/ansible-role-unbound.git
+    version: main
+    scm: git
+  - name: deitkrachten.docker
     src: https://github.com/de-it-krachten/ansible-role-docker.git
     version: main
     scm: git
-  - name: docker_compose
+  - name: deitkrachten.docker_compose
     src: https://github.com/de-it-krachten/ansible-role-docker_compose.git
     version: main
     scm: git

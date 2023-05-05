@@ -25,19 +25,28 @@
   when: awx_git_refresh | bool
   tags: molecule-idempotence-notest
 
-- name: Test for previous inventory file
+- name: Test for previous updates files
   ansible.builtin.stat:
-    path: "{{ awx_git_path }}/tools/docker-compose/inventory"
+    path: "{{ awx_git_path }}/{{ file }}"
+  loop: "{{ awx_possible_changed_files }}"
+  loop_control:
+    loop_var: file
   register: __inventory
 
 - name: Rollback the inventory changes from previous runs  # noqa command-instead-of-module
   ansible.builtin.command:
-    cmd: git checkout tools/docker-compose/inventory
+    cmd: git checkout {{ file.file }}
   args:
     chdir: "{{ awx_git_path }}"
+  become: yes
+  loop: "{{ __inventory.results }}"
+  loop_control:
+    loop_var: file
+    label:
+      - "{{ file.file }}"
   register: __git_checkout
-  changed_when: __git_checkout.stdout is not search('Updated 0 path from the index')
-  when: __inventory.stat.exists
+  changed_when: __git_checkout.stderr is not search('Updated 0 paths from the index')
+  when: file.stat.exists | bool
   tags: molecule-idempotence-notest
 
 - name: Clone the AWX code
@@ -46,29 +55,14 @@
     dest: "{{ awx_git_path }}"
     refspec: "{{ awx_git_tag }}"
     version: "{{ awx_git_tag }}"
+  become: yes
 
 - name: Use custom passwords when provided
   ansible.builtin.lineinfile:
     path: "{{ awx_git_path }}/tools/docker-compose/inventory"
     regexp: "^(# )*{{ key.name }}=.*"
     line: "{{ key.name }}=\"{{ key.value }}\""
-  loop:
-    - name: pg_host
-      value: "{{ vars['awx_pg_host'] | default('') }}"
-    - name: pg_hostname
-      value: "{{ vars['awx_pg_hostname'] | default('') }}"
-    - name: pg_port
-      value: "{{ vars['awx_pg_port'] | default('') }}"
-    - name: pg_username
-      value: "{{ vars['awx_pg_username'] | default('') }}"
-    - name: pg_password
-      value: "{{ vars['awx_pg_password'] | default('') }}"
-    - name: pg_database
-      value: "{{ vars['awx_pg_database'] | default('') }}"
-    - name: broadcast_websocket_secret
-      value: "{{ vars['awx_broadcast_websocket_secret'] | default('') }}"
-    - name: secret_key
-      value: "{{ vars['awx_secret_key'] | default('') }}"
+  loop: "{{ awx_inventory_updates }}"
   loop_control:
     loop_var: key
     label:
@@ -80,6 +74,19 @@
     path: "{{ awx_log_path }}"
     state: directory
     mode: "0750"
+  become: yes
+
+- name: Replace settings in docker-compose template
+  ansible.builtin.replace:
+    path: "{{ awx_git_path }}/tools/docker-compose/ansible/roles/sources/templates/docker-compose.yml.j2"
+    regexp: '{{ key.regexp }}'
+    replace: '{{ key.replace }}'
+  loop: "{{ awx_docker_compose_updates }}"
+  loop_control:
+    loop_var: key
+    label:
+      - "{{ key.name }}"
+  become: yes
 
 - name: Create receptor image
   when: awx_create_receptor | bool
@@ -115,6 +122,8 @@
       args:
         chdir: "{{ awx_git_path }}"
         creates: "{{ awx_log_path }}/awx-docker-compose-build.log"
+      environment:
+        LC_ALL: en_US.UTF-8
       become: yes
 
 - name: Execute docker-compose phase
@@ -135,6 +144,7 @@
       environment:
         PATH: /usr/local/bin:{{ ansible_env.PATH }}
         COMPOSE_UP_OPTS: "-d"
+        LC_ALL: en_US.UTF-8
         # COMPOSE_TAG: "{{ awx_version }}"
         # DEVEL_IMAGE_NAME: ansible/awx_devel:{{ awx_version }}
         LDAP: "{{ awx_ldap }}"
