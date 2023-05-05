@@ -213,6 +213,6 @@
     command: docker exec -ti tools_awx_1 awx-manage changepassword {{ awx_admin_username }}
     responses:
       (?i)password: "{{ awx_admin_password }}"
-  #no_log: true
+  no_log: true
   become: yes
   tags: molecule-idempotence-notest
