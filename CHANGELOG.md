@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/de-it-krachten/ansible-role-awx_docker/compare/v1.2.0...v1.3.0) (2023-05-06)
+
+
+### Features
+
+* Move to namespaced roles ([4400923](https://github.com/de-it-krachten/ansible-role-awx_docker/commit/44009232456a20510d3e414f764ce5e3af885a26))
+
 # [1.2.0](https://github.com/de-it-krachten/ansible-role-awx_docker/compare/v1.1.2...v1.2.0) (2022-11-10)
 
 
