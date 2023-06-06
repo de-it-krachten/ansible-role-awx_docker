@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/de-it-krachten/ansible-role-awx_docker/compare/v1.3.0...v1.4.0) (2023-06-06)
+
+
+### Features
+
+* Add support for proxied configurations ([bb9ffe0](https://github.com/de-it-krachten/ansible-role-awx_docker/commit/bb9ffe029b1ede1081eecd623d7585029afee17b))
+
 # [1.3.0](https://github.com/de-it-krachten/ansible-role-awx_docker/compare/v1.2.0...v1.3.0) (2023-05-06)
 
 
