@@ -1,5 +1,15 @@
 ---
 
+# AWX required OS Packages
+awx_os_packages:
+  - git
+  - make
+
+# AWX required pypi Packages
+awx_pip_packages:
+  - ansible
+  - pexpect
+
 # AWX version
 awx_version: latest
 

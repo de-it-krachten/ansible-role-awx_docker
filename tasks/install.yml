@@ -17,6 +17,10 @@
       ansible.builtin.set_fact:
         awx_version: "{{ awx_version_info.json.name }}"
 
+- name: Show version to be installed
+  ansible.builtin.debug:
+    var: awx_version
+
 - name: Ensure no git repo is present
   ansible.builtin.file:
     path: "{{ awx_git_path }}"
@@ -103,6 +107,7 @@
         chdir: "{{ awx_git_path }}"
         creates: "{{ awx_log_path }}/awx-container.log"
       environment:
+        PATH: /usr/local/bin:{{ ansible_env.PATH }}
         CONTAINERCMD: docker
         TAG: "quay.io/ansible/receptor:release_1.1"
       become: yes
@@ -123,6 +128,9 @@
         chdir: "{{ awx_git_path }}"
         creates: "{{ awx_log_path }}/awx-docker-compose-build.log"
       environment:
+        PATH: /usr/local/bin:{{ ansible_env.PATH }}
+        HTTP_PROXY: "{{ http_proxy | default('') }}"
+        HTTPS_PROXY: "{{ http_proxy | default('') }}"
         LC_ALL: en_US.UTF-8
       become: yes
 
@@ -143,6 +151,8 @@
         creates: "{{ awx_log_path }}/awx-docker-compose.log"
       environment:
         PATH: /usr/local/bin:{{ ansible_env.PATH }}
+        HTTP_PROXY: "{{ http_proxy | default('') }}"
+        HTTPS_PROXY: "{{ http_proxy | default('') }}"
         COMPOSE_UP_OPTS: "-d"
         LC_ALL: en_US.UTF-8
         # COMPOSE_TAG: "{{ awx_version }}"

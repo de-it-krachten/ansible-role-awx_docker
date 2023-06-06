@@ -1,15 +1,12 @@
 ---
 
-- name: Install ansible/git/make
+- name: Install required OS packages
   ansible.builtin.package:
-    name:
-      - ansible
-      - git
-      - make
+    name: "{{ awx_os_packages }}"
     state: present
   become: yes
 
-- name: Install pexect
+- name: Install required pypi packages
   ansible.builtin.pip:
-    name: pexpect
+    name: "{{ awx_pip_packages }}"
   become: yes
