@@ -323,7 +323,7 @@ platforms:
             type: dhcp
             auto_config: true
   sles15:
-    name: SUSE Linux Enterprise
+    name: SUSE Linux Enterprise 15
     ci: false
     supported: true
     galaxy:
