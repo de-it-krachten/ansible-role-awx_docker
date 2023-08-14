@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/de-it-krachten/ansible-role-awx_docker/compare/v1.4.0...v1.5.0) (2023-08-14)
+
+
+### Features
+
+* Update supported platforms & CI ([8f74751](https://github.com/de-it-krachten/ansible-role-awx_docker/commit/8f74751df0f2b5a19ba44ded4f3d6e9d8619f495))
+
 # [1.4.0](https://github.com/de-it-krachten/ansible-role-awx_docker/compare/v1.3.0...v1.4.0) (2023-06-06)
 
 
