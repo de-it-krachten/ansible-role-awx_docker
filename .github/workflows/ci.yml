@@ -63,11 +63,10 @@ jobs:
         run: |
           hostname -f
 
-      - name: disable apparmor for mysql
-        run: sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
-
-      - name: parse apparmor for mysql
-        run: sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
+      - name: Disable specific apparmor profiles
+        run: |
+          sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
+          sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
 
       - name: Install test dependencies.
         run: |

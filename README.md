@@ -25,8 +25,12 @@ Supported platforms
 - OracleLinux 8<sup>1</sup>
 - OracleLinux 9<sup>1</sup>
 - AlmaLinux 8<sup>1</sup>
+- SUSE Linux Enterprise 15<sup>1</sup>
+- openSUSE Leap 15
 - Debian 11 (Bullseye)
+- Debian 12 (Bookworm)
 - Ubuntu 20.04 LTS
+- Fedora 37
 
 Note:
 <sup>1</sup> : no automated testing is performed on these platforms
@@ -34,6 +38,16 @@ Note:
 ## Role Variables
 ### defaults/main.yml
 <pre><code>
+# AWX required OS Packages
+awx_os_packages:
+  - git
+  - make
+
+# AWX required pypi Packages
+awx_pip_packages:
+  - ansible
+  - pexpect
+
 # AWX version
 awx_version: latest
 

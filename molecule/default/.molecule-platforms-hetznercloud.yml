@@ -28,6 +28,10 @@
   ci: true
   server_type: cx31
   image: debian-11
+- name: debian12
+  ci: true
+  server_type: cx11
+  image: debian-12
 - name: ubuntu1804
   ci: false
   server_type: cx11
@@ -40,11 +44,11 @@
   ci: false
   server_type: cx11
   image: ubuntu-22.04
-- name: fedora36
-  ci: false
-  server_type: cx11
-  image: fedora-36
 - name: fedora37
-  ci: false
+  ci: true
   server_type: cx11
   image: fedora-37
+- name: fedora38
+  ci: false
+  server_type: cx11
+  image: fedora-38
