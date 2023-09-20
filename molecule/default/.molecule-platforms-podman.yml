@@ -49,7 +49,7 @@
   ci: false
   image: docker.io/dropveter/almalinux9-ansible
 - name: opensuse15
-  ci: true
+  ci: false
   image: docker.io/dropveter/opensuse15-ansible:latest
 - name: opensusetumbleweed15
   ci: false

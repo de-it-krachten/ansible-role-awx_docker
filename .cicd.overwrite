@@ -59,10 +59,27 @@ platforms:
   almalinux9:
     ci: false
     supported: false
+  opensuse15:
+    ci: false
+    supported: false
+  sles15:
+    ci: false
+    supported: false
   debian10:
     ci: false
     supported: false
   debian11:
+    ci: true
+    supported: true
+    molecule:
+      vagrant:
+        memory: 4096
+        interfaces:
+          - network_name: private_network
+            ip: 192.168.56.101
+      hetznercloud:
+        server_type: cx31
+  debian12:
     ci: true
     supported: true
     molecule:

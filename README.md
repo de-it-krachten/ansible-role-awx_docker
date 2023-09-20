@@ -25,8 +25,6 @@ Supported platforms
 - OracleLinux 8<sup>1</sup>
 - OracleLinux 9<sup>1</sup>
 - AlmaLinux 8<sup>1</sup>
-- SUSE Linux Enterprise 15<sup>1</sup>
-- openSUSE Leap 15
 - Debian 11 (Bullseye)
 - Debian 12 (Bookworm)
 - Ubuntu 20.04 LTS

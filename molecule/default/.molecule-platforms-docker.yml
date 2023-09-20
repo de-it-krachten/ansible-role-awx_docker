@@ -105,8 +105,8 @@
   volumes:
     - /sys/fs/cgroup:/sys/fs/cgroup:rw
 - name: opensuse15
-  ci: true
-  image: docker.io/dropveter/opensuse15-ansible:latest
+  ci: false
+  image: docker.io/geerlingguy/docker-opensuseleap15-ansible:latest
   privileged: true
   pre_build_image: true
   cgroupns_mode: host

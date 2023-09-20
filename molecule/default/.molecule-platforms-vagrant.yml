@@ -42,7 +42,7 @@
   box: generic/alma9
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: opensuse15
-  ci: true
+  ci: false
   box: generic/opensuse15
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: opensusetumbleweed15
@@ -60,8 +60,9 @@
   interfaces: [{'network_name': 'private_network', 'ip': '192.168.56.101'}]
 - name: debian12
   ci: true
-  box: generic/debian12
-  interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
+  box: debian/bookworm64
+  memory: 4096
+  interfaces: [{'network_name': 'private_network', 'ip': '192.168.56.101'}]
 - name: ubuntu1804
   ci: false
   box: generic/ubuntu1804
