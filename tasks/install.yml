@@ -46,8 +46,7 @@
   loop: "{{ __inventory.results }}"
   loop_control:
     loop_var: file
-    label:
-      - "{{ file.file }}"
+    label: "{{ file.file }}"
   register: __git_checkout
   changed_when: __git_checkout.stderr is not search('Updated 0 paths from the index')
   when: file.stat.exists | bool
@@ -69,8 +68,7 @@
   loop: "{{ awx_inventory_updates }}"
   loop_control:
     loop_var: key
-    label:
-      - "{{ key.name }}"
+    label: "{{ key.name }}"
   when: key.value | length > 0
 
 - name: Ensure the log directory exists
@@ -88,8 +86,7 @@
   loop: "{{ awx_docker_compose_updates }}"
   loop_control:
     loop_var: key
-    label:
-      - "{{ key.name }}"
+    label: "{{ key.name }}"
   become: yes
 
 - name: Create receptor image
