@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/de-it-krachten/ansible-role-awx_docker/compare/v1.5.0...v1.5.1) (2023-09-22)
+
+
+### Bug Fixes
+
+* Change loop/label for latest ansible ([bb9382d](https://github.com/de-it-krachten/ansible-role-awx_docker/commit/bb9382d2bdd6662e22110d48948da7178fad3459))
+
 # [1.5.0](https://github.com/de-it-krachten/ansible-role-awx_docker/compare/v1.4.0...v1.5.0) (2023-08-14)
 
 
