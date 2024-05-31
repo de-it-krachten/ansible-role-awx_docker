@@ -13,7 +13,6 @@ Install AWX using Docker
 None
 
 #### Collections
-- community.general
 - community.docker
 
 ## Platforms
@@ -28,7 +27,7 @@ Supported platforms
 - Debian 11 (Bullseye)
 - Debian 12 (Bookworm)
 - Ubuntu 20.04 LTS
-- Fedora 37
+- Ubuntu 24.04 LTS
 
 Note:
 <sup>1</sup> : no automated testing is performed on these platforms
@@ -131,10 +130,9 @@ awx_docker_compose_updates:
 - name: sample playbook for role 'awx_docker' pre playbook
   ansible.builtin.import_playbook: converge-pre.yml
   when: molecule_converge_pre is undefined or molecule_converge_pre | bool
-
 - name: sample playbook for role 'awx_docker'
   hosts: all
-  become: "yes"
+  become: 'yes'
   vars:
     awx_version: HEAD
   tasks:

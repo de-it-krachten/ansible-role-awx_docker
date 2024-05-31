@@ -107,10 +107,10 @@ platforms:
   ubuntu2204:
     ci: false
     supported: false
-  fedora38:
+  fedora39:
     ci: false
     supported: false
-  fedora38:
+  fedora40:
     ci: false
     supported: false
   alpine3:
