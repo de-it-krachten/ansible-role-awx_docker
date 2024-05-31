@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/de-it-krachten/ansible-role-awx_docker/compare/v1.5.1...v1.6.0) (2024-05-31)
+
+
+### Features
+
+* Add support for Ubuntu 24.04 LTS + Fedora 40 ([f657a77](https://github.com/de-it-krachten/ansible-role-awx_docker/commit/f657a778c21e6a887671087d918e484dbab0ce3f))
+
 ## [1.5.1](https://github.com/de-it-krachten/ansible-role-awx_docker/compare/v1.5.0...v1.5.1) (2023-09-22)
 
 
