@@ -20,5 +20,4 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - focal
-        - jammy
 dependencies: []
