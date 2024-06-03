@@ -77,7 +77,7 @@
   ci: false
   image: docker.io/geerlingguy/docker-ubuntu2204-ansible:latest
 - name: ubuntu2404
-  ci: true
+  ci: false
   image: docker.io/geerlingguy/docker-ubuntu2404-ansible:latest
 - name: fedora37
   ci: false

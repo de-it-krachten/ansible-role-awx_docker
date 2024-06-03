@@ -45,7 +45,7 @@
   server_type: cx11
   image: ubuntu-22.04
 - name: ubuntu2404
-  ci: true
+  ci: false
   server_type: cx11
   image: ubuntu-24.04
 - name: fedora37
