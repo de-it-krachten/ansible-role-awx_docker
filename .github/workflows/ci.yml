@@ -21,7 +21,7 @@ jobs:
 
   lint:
     name: "${{ matrix.name }}"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -49,7 +49,18 @@ jobs:
 
       - name: Show runner info
         run: |
-          hostname -f
+
+          hostname="$(hostname -f)"
+          eval os_name=$(awk -F= '/^NAME=/ {print $2}' /etc/os-release)
+          eval os_version=$(awk -F= '/^VERSION=/ {print $2}' /etc/os-release)
+          os="$os_name $os_version"
+          user="$(id -un)"
+          python=$(which python3)
+
+          echo "hostname : $hostname"
+          echo "user     : $user"
+          echo "os       : $os"
+          echo "python   : $python ($(python3 --version))"
 
       - name: Disable specific apparmor profiles
         run: |
