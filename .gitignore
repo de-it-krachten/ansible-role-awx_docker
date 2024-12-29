@@ -1,4 +1,4 @@
-molecule/default/molecule.yml
+#molecule/default/molecule.yml
 *.bak
 .converted
 defaults/defaults-*
