@@ -16,6 +16,10 @@
   ci: false
   box: generic/centos9s
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
+- name: centos10s
+  ci: false
+  box: generic/centos10s
+  interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: rockylinux8
   ci: true
   box: generic/rocky8
@@ -25,6 +29,10 @@
   ci: false
   box: generic/rocky9
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
+- name: rockylinux10
+  ci: false
+  box: generic/rocky10
+  interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: oraclelinux8
   ci: false
   box: generic/oracle8
@@ -33,6 +41,10 @@
   ci: false
   box: generic/oracle9
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
+- name: oraclelinux10
+  ci: false
+  box: generic/oracle10
+  interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: almalinux8
   ci: false
   box: generic/alma8
@@ -40,6 +52,10 @@
 - name: almalinux9
   ci: false
   box: generic/alma9
+  interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
+- name: almalinux10
+  ci: false
+  box: generic/alma10
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: opensuse15
   ci: false
@@ -61,6 +77,11 @@
 - name: debian12
   ci: true
   box: debian/bookworm64
+  memory: 4096
+  interfaces: [{'network_name': 'private_network', 'ip': '192.168.56.101'}]
+- name: debian13
+  ci: true
+  box: debian/trixie64
   memory: 4096
   interfaces: [{'network_name': 'private_network', 'ip': '192.168.56.101'}]
 - name: ubuntu1804
@@ -100,6 +121,10 @@
   ci: false
   box: generic/fedora41
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp'}]
+- name: fedora42
+  ci: false
+  box: generic/fedora41
+  interfaces: [{'network_name': 'private_network', 'type': 'dhcp'}]
 - name: alpine3
   ci: false
   box: generic/alpine312
@@ -122,5 +147,10 @@
 - name: win2022
   ci: false
   box: jborean93/WindowsServer2022
+  groups: ['windows']
+  interfaces: [{'network_name': 'private_network', 'type': 'dhcp'}]
+- name: win2025
+  ci: false
+  box: jborean93/WindowsServer2025
   groups: ['windows']
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp'}]
