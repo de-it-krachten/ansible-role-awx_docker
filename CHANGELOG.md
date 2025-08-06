@@ -1,3 +1,11 @@
+# [1.8.0](https://github.com/de-it-krachten/ansible-role-awx_docker/compare/v1.7.0...v1.8.0) (2025-08-06)
+
+
+### Features
+
+* Add support for Debian 13 (Trixie) ([4afcddf](https://github.com/de-it-krachten/ansible-role-awx_docker/commit/4afcddfd856590ced70d6e716d9f156c6486fe07))
+* Add support for OracleLinux 10 ([4a7acc7](https://github.com/de-it-krachten/ansible-role-awx_docker/commit/4a7acc7587a21ae599f81bdaf2ef034b09b7d60c))
+
 # [1.7.0](https://github.com/de-it-krachten/ansible-role-awx_docker/compare/v1.6.0...v1.7.0) (2024-12-29)
 
 
