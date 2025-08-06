@@ -18,6 +18,9 @@ platforms:
   rhel9:
     ci: false
     supported: false
+  rhel10:
+    ci: false
+    supported: false
   centos7:
     ci: false
     supported: false
@@ -47,16 +50,25 @@ platforms:
   rockylinux9:
     ci: false
     supported: false
+  rockylinux10:
+    ci: false
+    supported: false
   oraclelinux8:
     ci: false
     supported: true
   oraclelinux9:
     ci: false
     supported: true
+  oraclelinux10:
+    ci: false
+    supported: true
   almalinux8:
     ci: false
     supported: true
   almalinux9:
+    ci: false
+    supported: false
+  almalinux10:
     ci: false
     supported: false
   opensuse15:
@@ -90,6 +102,17 @@ platforms:
             ip: 192.168.56.101
       hetznercloud:
         server_type: cx31
+  debian13:
+    ci: true
+    supported: true
+    molecule:
+      vagrant:
+        memory: 4096
+        interfaces:
+          - network_name: private_network
+            ip: 192.168.56.101
+      hetznercloud:
+        server_type: cx31
   ubuntu1804:
     ci: false
     supported: false
@@ -110,10 +133,10 @@ platforms:
   ubuntu2404:
     ci: false
     supported: false
-  fedora40:
+  fedora41:
     ci: false
     supported: false
-  fedora41:
+  fedora42:
     ci: false
     supported: false
   alpine3:
