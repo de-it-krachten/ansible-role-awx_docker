@@ -18,7 +18,7 @@
   image: centos-stream-10
 - name: rockylinux8
   ci: true
-  server_type: cx31
+  server_type: cx22
   image: rocky-8
 - name: rockylinux9
   ci: false
@@ -34,15 +34,15 @@
   image: debian-10
 - name: debian11
   ci: true
-  server_type: cx31
+  server_type: cx22
   image: debian-11
 - name: debian12
   ci: true
-  server_type: cx31
+  server_type: cx22
   image: debian-12
 - name: debian13
   ci: true
-  server_type: cx31
+  server_type: cx22
   image: debian-13
 - name: ubuntu1804
   ci: false
@@ -50,7 +50,7 @@
   image: ubuntu-18.04
 - name: ubuntu2004
   ci: true
-  server_type: cx31
+  server_type: cx22
   image: ubuntu-20.04
 - name: ubuntu2204
   ci: false
@@ -84,3 +84,7 @@
   ci: false
   server_type: cx22
   image: fedora-42
+- name: fedora43
+  ci: false
+  server_type: cx22
+  image: fedora-43

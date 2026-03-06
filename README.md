@@ -13,7 +13,7 @@ Install AWX using Docker
 None
 
 #### Collections
-- community.docker
+- {'name': 'community.docker'}
 
 ## Platforms
 
@@ -32,6 +32,7 @@ Supported platforms
 
 Note:
 <sup>1</sup> : no automated testing is performed on these platforms
+
 
 ## Role Variables
 ### defaults/main.yml
@@ -135,6 +136,7 @@ awx_docker_compose_updates:
   hosts: all
   become: 'yes'
   vars:
+    molecule_driver: '{{ lookup(''env'', ''MOLECULE_DRIVER_NAME'') }}'
     awx_version: HEAD
   tasks:
     - name: Include role 'awx_docker'

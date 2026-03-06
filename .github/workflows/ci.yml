@@ -30,22 +30,35 @@ jobs:
             # ansible: "ansible>10,<11"
             ansible: "ansible-core>2.17,<2.18"
             ansible_lint: "ansible-lint"
+            python: "3.13"
+
           - name: "ansible_2.18"
             # ansible: "ansible>11,<12"
             ansible: "ansible-core>2.18,<2.19"
             ansible_lint: "ansible-lint"
+            python: "3.13"
+
 
     steps:
+
       - name: Check out the codebase.
         uses: actions/checkout@v4
         with:
           path: "${{ github.repository }}"
 
-      - name: Set up Python 3.
+      - name: Set up Python3.
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: "${{ matrix.python }}"
 
+
+      - name: Configure deployment key
+        run: |
+          [[ ! -d ~/.ssh ]] && mkdir -m 700 ~/.ssh
+          echo "$DEPLOYMENT_KEY" | base64 -d > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+        env:
+          DEPLOYMENT_KEY: ${{ secrets.DEPLOYMENT_KEY }}
 
       - name: Show runner info
         run: |
@@ -78,11 +91,21 @@ jobs:
 
       - name: Retrieve & install wrapper scripts
         run: |
-          set -e
-          sudo apt install curl
-          curl -s -o /tmp/install.sh \
-            https://raw.githubusercontent.com/de-it-krachten/ansible-role-molecule/dev/files/install.sh
-          bash /tmp/install.sh
+
+          release_url=https://github.com/de-it-krachten/cicd-tools/releases/download/v1.6.0/cicd-tools_1.6.0.deb
+          api_url=https://api.github.com/repos/de-it-krachten/cicd-tools/releases/latest
+
+          # Install requirements
+          sudo apt install curl jq -y
+
+          # Get latest release download URL for .deb asset
+          url=$(curl -s $api_url | jq -r '.assets[] | select(.name | endswith(".deb")) | .browser_download_url')
+          url=${url:-$release_url}
+
+          file=$(basename $url)
+          curl -s -L -o $file -s $url || exit 1
+          echo "Install package '$file'"
+          sudo dpkg -i $file || exit 1
 
       - name: Install required galaxy collections
         run: |
@@ -119,5 +142,5 @@ jobs:
           set -e
           source ~/.venv/bin/activate
           yamllint .
-          ansible-lint.sh
+          /usr/local/bin/ansible-lint.sh -f readable
 

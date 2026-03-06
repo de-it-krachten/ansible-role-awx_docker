@@ -8,6 +8,7 @@
   hosts: all
   become: "yes"
   vars:
+    molecule_driver: "{{ lookup('env', 'MOLECULE_DRIVER_NAME') }}"
     awx_version: HEAD
   tasks:
     - name: Include role 'ansible-role-awx_docker'

@@ -9,139 +9,51 @@ generic:
 
 # Supported platforms
 platforms:
-  rhel7:
-    ci: false
-    supported: false
-  rhel8:
-    ci: false
-    supported: true
   rhel9:
-    ci: false
     supported: false
+    ci: false
   rhel10:
-    ci: false
     supported: false
-  centos7:
     ci: false
-    supported: false
-  centos8:
-    ci: false
-    supported: false
-  centos8s:
-    ci: false
-    supported: false
-  centos9s:
-    ci: false
-    supported: false
-  rockylinux8:
-    ci: true
-    supported: true
-    molecule:
-      vagrant:
-        memory: 4096
-        interfaces:
-          - network_name: private_network
-            ip: 192.168.56.100
-#          - network_name: forwarded_port
-#            guest: 8043
-#            host: 8043
-      hetznercloud:
-        server_type: cx31
   rockylinux9:
-    ci: false
     supported: false
+    ci: false
   rockylinux10:
-    ci: false
     supported: false
+    ci: false
   oraclelinux8:
-    ci: false
     supported: true
+    ci: false
   oraclelinux9:
-    ci: false
     supported: true
+    ci: false
   oraclelinux10:
-    ci: false
     supported: true
+    ci: false
   almalinux8:
-    ci: false
     supported: true
+    ci: false
   almalinux9:
-    ci: false
     supported: false
+    ci: false
   almalinux10:
-    ci: false
     supported: false
-  opensuse15:
     ci: false
-    supported: false
-  sles15:
-    ci: false
-    supported: false
-  debian10:
-    ci: false
-    supported: false
-  debian11:
-    ci: true
-    supported: true
-    molecule:
-      vagrant:
-        memory: 4096
-        interfaces:
-          - network_name: private_network
-            ip: 192.168.56.101
-      hetznercloud:
-        server_type: cx31
-  debian12:
-    ci: true
-    supported: true
-    molecule:
-      vagrant:
-        memory: 4096
-        interfaces:
-          - network_name: private_network
-            ip: 192.168.56.101
-      hetznercloud:
-        server_type: cx31
-  debian13:
-    ci: true
-    supported: true
-    molecule:
-      vagrant:
-        memory: 4096
-        interfaces:
-          - network_name: private_network
-            ip: 192.168.56.101
-      hetznercloud:
-        server_type: cx31
-  ubuntu1804:
-    ci: false
-    supported: false
   ubuntu2004:
-    ci: true
     supported: true
-    molecule:
-      vagrant:
-        memory: 4096
-        interfaces:
-          - network_name: private_network
-            ip: 192.168.56.102
-      hetznercloud:
-        server_type: cx31
+    ci: true
   ubuntu2204:
-    ci: false
     supported: false
+    ci: false
   ubuntu2404:
-    ci: false
     supported: false
-  fedora41:
     ci: false
-    supported: false
   fedora42:
-    ci: false
     supported: false
-  alpine3:
     ci: false
+  fedora43:
     supported: false
+    ci: false
 
 # Github
 github:
