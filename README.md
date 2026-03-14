@@ -13,7 +13,7 @@ Install AWX using Docker
 None
 
 #### Collections
-- {'name': 'community.docker'}
+- community.docker
 
 ## Platforms
 
