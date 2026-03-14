@@ -23,8 +23,7 @@
 - name: rockylinux8
   ci: true
   box: generic/rocky8
-  memory: 4096
-  interfaces: [{'network_name': 'private_network', 'ip': '192.168.56.100'}]
+  interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: rockylinux9
   ci: false
   box: generic/rocky9
@@ -61,9 +60,9 @@
   ci: false
   box: generic/opensuse15
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
-- name: opensusetumbleweed15
+- name: opensuse16
   ci: false
-  box: generic/opensuse15
+  box: generic/opensuse16
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: debian10
   ci: false
@@ -72,18 +71,15 @@
 - name: debian11
   ci: true
   box: generic/debian11
-  memory: 4096
-  interfaces: [{'network_name': 'private_network', 'ip': '192.168.56.101'}]
+  interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: debian12
   ci: true
   box: debian/bookworm64
-  memory: 4096
-  interfaces: [{'network_name': 'private_network', 'ip': '192.168.56.101'}]
+  interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: debian13
   ci: true
   box: debian/trixie64
-  memory: 4096
-  interfaces: [{'network_name': 'private_network', 'ip': '192.168.56.101'}]
+  interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: ubuntu1804
   ci: false
   box: generic/ubuntu1804
@@ -91,8 +87,7 @@
 - name: ubuntu2004
   ci: true
   box: generic/ubuntu2004
-  memory: 4096
-  interfaces: [{'network_name': 'private_network', 'ip': '192.168.56.102'}]
+  interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: ubuntu2204
   ci: false
   box: generic/ubuntu2204
@@ -123,7 +118,11 @@
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp'}]
 - name: fedora42
   ci: false
-  box: generic/fedora41
+  box: generic/fedora42
+  interfaces: [{'network_name': 'private_network', 'type': 'dhcp'}]
+- name: fedora43
+  ci: false
+  box: generic/fedora43
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp'}]
 - name: alpine3
   ci: false
