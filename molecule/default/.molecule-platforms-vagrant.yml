@@ -21,7 +21,7 @@
   box: generic/centos10s
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: rockylinux8
-  ci: true
+  ci: false
   box: generic/rocky8
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: rockylinux9
@@ -44,6 +44,8 @@
   ci: false
   box: generic/oracle10
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
+- name: olam8
+  ci: false
 - name: almalinux8
   ci: false
   box: generic/alma8
@@ -69,15 +71,15 @@
   box: generic/debian10
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: debian11
-  ci: true
+  ci: false
   box: generic/debian11
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: debian12
-  ci: true
+  ci: false
   box: debian/bookworm64
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: debian13
-  ci: true
+  ci: false
   box: debian/trixie64
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: ubuntu1804
@@ -85,7 +87,7 @@
   box: generic/ubuntu1804
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: ubuntu2004
-  ci: true
+  ci: false
   box: generic/ubuntu2004
   interfaces: [{'network_name': 'private_network', 'type': 'dhcp', 'auto_config': True}]
 - name: ubuntu2204

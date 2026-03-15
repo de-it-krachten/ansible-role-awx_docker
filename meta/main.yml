@@ -8,18 +8,5 @@ galaxy_info:
   company: De IT Krachten BV
   license: MIT
   min_ansible_version: '2.9'
-  platforms:
-    - name: EL
-      versions:
-        - '8'
-        - '9'
-        - '10'
-    - name: Debian
-      versions:
-        - bullseye
-        - bookworm
-        - trixie
-    - name: Ubuntu
-      versions:
-        - focal
+  platforms: null
 dependencies: []

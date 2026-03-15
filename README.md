@@ -19,16 +19,6 @@ None
 
 Supported platforms
 
-- Red Hat Enterprise Linux 8<sup>1</sup>
-- RockyLinux 8
-- OracleLinux 8<sup>1</sup>
-- OracleLinux 9<sup>1</sup>
-- OracleLinux 10<sup>1</sup>
-- AlmaLinux 8<sup>1</sup>
-- Debian 11 (Bullseye)
-- Debian 12 (Bookworm)
-- Debian 13 (Trixie)
-- Ubuntu 20.04 LTS
 
 Note:
 <sup>1</sup> : no automated testing is performed on these platforms

@@ -107,7 +107,7 @@ jobs:
             api_url=https://api.github.com/repos/de-it-krachten/cicd-tools/releases/latest
 
             # Get latest release download URL for .deb asset
-            cicd_version=$(curl -s $api_url | jq -r '.tag_name' | sed "s/^v//")
+            cicd_version=$(curl -s $api_url | jq -r '.tag_name' | sed "s/null//" | sed "s/^v//")
 
           fi
 
